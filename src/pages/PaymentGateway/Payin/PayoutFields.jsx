@@ -4,109 +4,25 @@ import { Form, Input } from "antd";
 import { splitAndCapitalise } from "../../../helpers/functions";
 
 const inputConfig = {
-  CASHFREE: {
-    client_id: {
-      placeholder: "CASHFREE CLIENT ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "CASHFREE SECRET KEY",
-      type: "password",
-    },
-  },
-  QIKPAY: {
-    merchant_id: {
-      placeholder: "QIKPAY TOKEN",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "QIKPAY HKEY",
-      type: "password",
-    },
-  },
-  EASYPAYMENTZ: {
-    merchant_id: {
-      placeholder: "EASYPAYMENTZ MERCHANT ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "EASYPAYMENTZ SECRET",
-      type: "password",
-    },
-  },
-  ISERVEU: {
+  PAYDUNIA: {
     base_url_alt: {
-      placeholder: "ISERVEU STATUS URL",
+      placeholder: "PAYDUNIA STATUS URL",
       type: "url",
     },
-    client_id: {
-      placeholder: "ISERVEU CLIENT ID",
-      type: "password",
-    },
-    secret_ket: {
-      placeholder: "ISERVEU CLIENT SECRET",
-      type: "password",
-    },
-  },
-  PAYCOONS: {
-    client_id: {
-      placeholder: "PAYCOONS CLIENT ID",
+    merchant_id: {
+      placeholder: "PAYDUNIA MERCHANT ID",
       type: "password",
     },
     secret_key: {
-      placeholder: "PAYCOONS CLIENT SECRET KEY",
+      placeholder: "PAYDUNIA SECRET KEY",
       type: "password",
     },
-    merchant_id: {
-      placeholder: "PAYCOONS MERCHANT ID",
+    username: {
+      placeholder: "PAYDUNIA USERNAME",
       type: "password",
     },
-  },
-  ZAPAY: {
-    merchant_id: {
-      placeholder: "ZAPAY MERCHANT USER ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "ZAPAY PAYOUT API KEY",
-      type: "password",
-    },
-  },
-  ISMARTPAY: {
-    merchant_id: {
-      placeholder: "ISMARTPAY MERCHANT ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "ISMARTPAY API KEY",
-      type: "password",
-    },
-    client_id: {
-      placeholder: "ISMARTPAY WALLET ID",
-      type: "password",
-    },
-  },
-  PAYANYTIME: {
-    merchant_id: {
-      placeholder: "PayAnyTime Email ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "PayAnyTime Password",
-      type: "password",
-    },
-  },
-  FINIXPAY: {
-    client_id: {
-      placeholder: "FINIXPAY CLIENT ID",
-      type: "password",
-    },
-    secret_key: {
-      placeholder: "FINIXPAY CLIENT SECRET KEY",
-      type: "password",
-    },
-    merchant_id: {
-      placeholder: "FINIXPAY MERCHANT ID",
+    password: {
+      placeholder: "PAYDUNIA PASSWORD",
       type: "password",
     },
   },

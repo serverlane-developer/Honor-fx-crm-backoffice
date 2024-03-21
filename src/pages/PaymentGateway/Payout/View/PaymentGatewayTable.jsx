@@ -192,7 +192,7 @@ const PaymentGatewayTable = ({ status }) => {
       dataIndex: "pg_id",
       key: "pg_id",
       render: (value, row) => (
-        <Link to={`/paymentgateway/update/${value}`}>
+        <Link to={`/paymentgateway/payout/update/${value}`}>
           Update {row.pg_label}
         </Link>
       ),

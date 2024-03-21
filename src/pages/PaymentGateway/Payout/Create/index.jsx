@@ -30,7 +30,7 @@ const CreatePaymentGateway = () => {
       }
       form.resetFields();
       message.success(resMessage);
-      navigate("/paymentgateway/view", { replace: true });
+      navigate("/paymentgateway/payout/view", { replace: true });
     } catch (err) {
       const axiosError = getAxiosError(err);
       const errMessage = "Error while updating payment gateway";

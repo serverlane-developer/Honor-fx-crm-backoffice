@@ -1,88 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React from "react";
 import propTypes from "prop-types";
-import { Button, Card, Checkbox, Form, Input, InputNumber, Row, Select } from "antd";
+import { Button, Card, Form, Input, Row, Select } from "antd";
 import { PayoutArr, PayoutFields } from "./PayoutFields";
-
-const PaymentMethodSetup = ({ method }) => {
-  if (!["imps", "neft", "rtgs"].includes(method)) return null;
-  return (
-    <>
-      <Form.Item
-        label={`${method.toUpperCase()} Enabled`}
-        name={`${method}_enabled`}
-        valuePropName="checked"
-        style={{
-          display: "inline-block",
-          width: "calc(33% - 12px)",
-        }}
-      >
-        <Checkbox />
-      </Form.Item>
-      <Form.Item
-        label={`${method.toUpperCase()} Minimum`}
-        name={`${method}_min`}
-        rules={[
-          {
-            required: true,
-            message: "Required",
-          },
-          (formInstance) => ({
-            message: "Max should be more than Min",
-            validator(rule, value) {
-              if (value === null) {
-                return Promise.resolve();
-              }
-              const comparedValue = formInstance.getFieldValue(`${method}_max`);
-              if (Number(value) > Number(comparedValue)) {
-                return Promise.reject(new Error());
-              }
-              return Promise.resolve();
-            },
-          }),
-        ]}
-        style={{
-          display: "inline-block",
-          width: "calc(33% - 12px)",
-        }}
-      >
-        <InputNumber placeholder={`Minimum Amount for ${method.toUpperCase()}`} min={1} />
-      </Form.Item>
-      <Form.Item
-        label={`${method.toUpperCase()} Maximum`}
-        name={`${method}_max`}
-        rules={[
-          {
-            required: true,
-            message: "Required",
-          },
-          (formInstance) => ({
-            message: "Max should be more than Min",
-            validator(rule, value) {
-              if (value === null) {
-                return Promise.resolve();
-              }
-              const comparedValue = formInstance.getFieldValue(`${method}_min`);
-              if (Number(value) < Number(comparedValue)) {
-                return Promise.reject(new Error());
-              }
-              return Promise.resolve();
-            },
-          }),
-        ]}
-        style={{
-          display: "inline-block",
-          width: "calc(33% - 12px)",
-        }}
-      >
-        <InputNumber placeholder={`Maximum Amount for ${method.toUpperCase()}`} min={2} />
-      </Form.Item>
-    </>
-  );
-};
-PaymentMethodSetup.propTypes = {
-  method: propTypes.oneOf(["imps", "neft", "rtgs"]).isRequired,
-};
 
 const PaymentGatewayForm = ({ form, onFinish, isSubmitting }) => {
   const pg_service = Form.useWatch("pg_service", form);
@@ -160,23 +80,6 @@ const PaymentGatewayForm = ({ form, onFinish, isSubmitting }) => {
         </Form.Item>
 
         <PayoutFields pg_service={pg_service} />
-
-        <Form.Item
-          label="Threshold"
-          name="threshold_limit"
-          rules={[
-            {
-              required: true,
-              message: "Threshold Limit is Required",
-            },
-          ]}
-        >
-          <InputNumber placeholder="Maximum amount Gateway can Process" min={1} />
-        </Form.Item>
-
-        <PaymentMethodSetup method="imps" />
-        <PaymentMethodSetup method="neft" />
-        <PaymentMethodSetup method="rtgs" />
 
         <Row justify="center" align="middle">
           <Form.Item style={{ marginTop: 40 }}>

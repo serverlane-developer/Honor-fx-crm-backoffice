@@ -15,35 +15,6 @@ import appConstants from "../../../../config/appConstants";
 import { objectToQueryString } from "../../../../helpers/url";
 import ConfirmSwitch from "../../../../components/ConfirmSwitch";
 import LabelValue from "../../../../components/LabelValue";
-import ViewBalance from "./ViewBalance";
-
-const getPaymentMethodColumn = (method = "imps") => {
-  if (!["imps", "neft", "rtgs"].includes(method)) return {};
-
-  return {
-    title: method.toUpperCase(),
-    dataIndex: method,
-    key: method,
-    render: (_, row) => {
-      const enabled = row[`${method}_enabled`];
-      const min = row[`${method}_min`];
-      const max = row[`${method}_max`];
-      return (
-        <div>
-          <div style={{ color: enabled ? "green" : "red", fontWeight: "bold" }}>
-            {enabled ? "Enabled" : "Disabled"}
-          </div>
-          {/* <LabelValue
-            label=""
-            value={<span style={{ color: enabled ? "green" : "red" }}>{enabled ? "Enabled" : "Disabled"}</span>}
-          /> */}
-          <LabelValue label="Min" value={String(min)} />
-          <LabelValue label="Max" value={String(max)} />
-        </div>
-      );
-    },
-  };
-};
 
 const PaymentGatewayTable = ({ status }) => {
   const [list, setList] = useState([]);
@@ -59,12 +30,7 @@ const PaymentGatewayTable = ({ status }) => {
     },
   });
   useEffect(() => {
-    const getPaymentGatewayUsers = async ({
-      orderBy,
-      dir,
-      limit,
-      skip,
-    } = {}) => {
+    const getPaymentGatewayUsers = async ({ orderBy, dir, limit, skip } = {}) => {
       try {
         const { pageSize, current } = tableParams.pagination;
 
@@ -124,10 +90,7 @@ const PaymentGatewayTable = ({ status }) => {
       title: "Sr No",
       dataIndex: "pg_id",
       key: "sr_no",
-      render: (__, ___, i) =>
-        tableParams.pagination.pageSize * (tableParams.pagination.current - 1) +
-        i +
-        1,
+      render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
     },
     {
       title: "Label",
@@ -151,20 +114,6 @@ const PaymentGatewayTable = ({ status }) => {
       render: (value) => <Tag color="blue">{value}</Tag>,
     },
     {
-      title: "View Balance",
-      dataIndex: "pg_id",
-      key: "pg_balance",
-      render: (value) => <ViewBalance pgId={value} />,
-    },
-    {
-      title: "Threshold",
-      dataIndex: "threshold_limit",
-      key: "threshold_limit",
-    },
-    getPaymentMethodColumn("imps"),
-    getPaymentMethodColumn("neft"),
-    getPaymentMethodColumn("rtgs"),
-    {
       title: "Timestamps",
       dataIndex: "created_at",
       key: "created_at",
@@ -172,17 +121,11 @@ const PaymentGatewayTable = ({ status }) => {
         <div>
           <LabelValue label="Created By:" value={row.created_by} />
           {row.created_at && (
-            <LabelValue
-              label="Created At:"
-              value={moment(row.created_at).format(appConstants.dateFormat)}
-            />
+            <LabelValue label="Created At:" value={moment(row.created_at).format(appConstants.dateFormat)} />
           )}
           <LabelValue label="Updated By:" value={row.updated_by} />
           {row.updated_at && (
-            <LabelValue
-              label="Updated At:"
-              value={moment(row.updated_at).format(appConstants.dateFormat)}
-            />
+            <LabelValue label="Updated At:" value={moment(row.updated_at).format(appConstants.dateFormat)} />
           )}
         </div>
       ),
@@ -191,11 +134,7 @@ const PaymentGatewayTable = ({ status }) => {
       title: "Update Payment gateway",
       dataIndex: "pg_id",
       key: "pg_id",
-      render: (value, row) => (
-        <Link to={`/paymentgateway/update/${value}`}>
-          Update {row.pg_label}
-        </Link>
-      ),
+      render: (value, row) => <Link to={`/paymentgateway/payin/update/${value}`}>Update {row.pg_label}</Link>,
     },
 
     {
@@ -227,9 +166,7 @@ const PaymentGatewayTable = ({ status }) => {
   if (isLoading) return <Loader message="Loading Users..." />;
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <DataTable
         bordered
         columns={columns}

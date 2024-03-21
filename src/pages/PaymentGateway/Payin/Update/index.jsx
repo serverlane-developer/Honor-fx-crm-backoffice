@@ -34,7 +34,7 @@ const UpdatePaymentGateway = () => {
       }
       form.resetFields();
       message.success(resMessage);
-      navigate("/paymentgateway/view", { replace: true });
+      navigate("/paymentgateway/payin/view", { replace: true });
     } catch (err) {
       const axiosError = getAxiosError(err);
       const errMessage = "Error while updating payment gateway";
@@ -48,7 +48,7 @@ const UpdatePaymentGateway = () => {
   useEffect(() => {
     if (!pgid) {
       message.error("Payment Gateway ID is required");
-      navigate("/paymentgateway/view", { replace: true });
+      navigate("/paymentgateway/payin/view", { replace: true });
       return;
     }
 
