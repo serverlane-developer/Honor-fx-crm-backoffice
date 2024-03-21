@@ -21,7 +21,7 @@ const UpdatePaymentGateway = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const onFinish = async (values) => {
-    const endpoint = Constants.UPDATE_PAYOUT_GATEWAY;
+    const endpoint = Constants.UPDATE_PAYIN_GATEWAY;
     const url = `${Constants.BASE_URL}${endpoint.url}/${pgid}`;
     try {
       setIsSubmitting(true);
@@ -55,7 +55,7 @@ const UpdatePaymentGateway = () => {
     const getPaymentGatewayById = async () => {
       try {
         setIsLoading(true);
-        const endpoint = Constants.GET_PAYOUT_GATEWAY_BY_ID;
+        const endpoint = Constants.GET_PAYIN_GATEWAY_BY_ID;
         const url = `${Constants.BASE_URL}${endpoint.url}/${pgid}`;
         const res = await callApi(endpoint.method, url);
         const data = res?.data?.data;

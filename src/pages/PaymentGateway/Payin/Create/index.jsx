@@ -17,7 +17,7 @@ const CreatePaymentGateway = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = async (values) => {
-    const endpoint = Constants.CREATE_PAYOUT_GATEWAY;
+    const endpoint = Constants.CREATE_PAYIN_GATEWAY;
     const url = `${Constants.BASE_URL}${endpoint.url}`;
     try {
       setIsSubmitting(true);

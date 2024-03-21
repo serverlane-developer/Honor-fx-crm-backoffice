@@ -44,7 +44,7 @@ const PaymentGatewayTable = ({ status }) => {
         let queryString = objectToQueryString(data);
         if (queryString) queryString = `?${queryString}`;
 
-        const endpoint = apiConstants.GET_PAYOUT_GATEWAYS;
+        const endpoint = apiConstants.GET_PAYIN_GATEWAYS;
         const url = apiConstants.BASE_URL + endpoint.url + queryString;
 
         const response = await callApi(endpoint.method, url);
@@ -77,7 +77,7 @@ const PaymentGatewayTable = ({ status }) => {
   }, [tableParams.pagination]);
 
   const onStatusToggle = async (id, isDeleted) => {
-    const endpoint = apiConstants.DELETE_PAYOUT_GATEWAY;
+    const endpoint = apiConstants.DELETE_PAYIN_GATEWAY;
     const url = `${apiConstants.BASE_URL}${endpoint.url}/${id}`;
     const { data } = await callApi(endpoint.method, url, {
       is_deleted: isDeleted,
