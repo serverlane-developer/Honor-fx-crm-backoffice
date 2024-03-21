@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 import { Form, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import Title from "../../../components/Title";
+import Title from "../../../../components/Title";
 
-import Constants from "../../../config/apiConstants";
-import callApi from "../../../helpers/NetworkHelper";
-import getAxiosError from "../../../helpers/getAxiosError";
+import Constants from "../../../../config/apiConstants";
+import callApi from "../../../../helpers/NetworkHelper";
+import getAxiosError from "../../../../helpers/getAxiosError";
 import PaymentGatewayForm from "../PaymentGatewayForm";
 
 const CreatePaymentGateway = () => {
@@ -17,7 +17,7 @@ const CreatePaymentGateway = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onFinish = async (values) => {
-    const endpoint = Constants.CREATE_PAYMENT_GATEWAY;
+    const endpoint = Constants.CREATE_PAYOUT_GATEWAY;
     const url = `${Constants.BASE_URL}${endpoint.url}`;
     try {
       setIsSubmitting(true);

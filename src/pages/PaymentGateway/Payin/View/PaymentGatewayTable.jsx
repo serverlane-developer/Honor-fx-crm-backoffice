@@ -4,17 +4,17 @@ import moment from "moment";
 import { Tag, message } from "antd";
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
-import apiConstants from "../../../config/apiConstants";
-import callApi from "../../../helpers/NetworkHelper";
+import apiConstants from "../../../../config/apiConstants";
+import callApi from "../../../../helpers/NetworkHelper";
 
-import getAxiosError from "../../../helpers/getAxiosError";
+import getAxiosError from "../../../../helpers/getAxiosError";
 
-import Loader from "../../../components/Loader";
-import DataTable from "../../../components/DataTable";
-import appConstants from "../../../config/appConstants";
-import { objectToQueryString } from "../../../helpers/url";
-import ConfirmSwitch from "../../../components/ConfirmSwitch";
-import LabelValue from "../../../components/LabelValue";
+import Loader from "../../../../components/Loader";
+import DataTable from "../../../../components/DataTable";
+import appConstants from "../../../../config/appConstants";
+import { objectToQueryString } from "../../../../helpers/url";
+import ConfirmSwitch from "../../../../components/ConfirmSwitch";
+import LabelValue from "../../../../components/LabelValue";
 import ViewBalance from "./ViewBalance";
 
 const getPaymentMethodColumn = (method = "imps") => {
@@ -78,7 +78,7 @@ const PaymentGatewayTable = ({ status }) => {
         let queryString = objectToQueryString(data);
         if (queryString) queryString = `?${queryString}`;
 
-        const endpoint = apiConstants.GET_PAYMENT_GATEWAYS;
+        const endpoint = apiConstants.GET_PAYOUT_GATEWAYS;
         const url = apiConstants.BASE_URL + endpoint.url + queryString;
 
         const response = await callApi(endpoint.method, url);
@@ -111,7 +111,7 @@ const PaymentGatewayTable = ({ status }) => {
   }, [tableParams.pagination]);
 
   const onStatusToggle = async (id, isDeleted) => {
-    const endpoint = apiConstants.DELETE_PAYMENT_GATEWAY;
+    const endpoint = apiConstants.DELETE_PAYOUT_GATEWAY;
     const url = `${apiConstants.BASE_URL}${endpoint.url}/${id}`;
     const { data } = await callApi(endpoint.method, url, {
       is_deleted: isDeleted,

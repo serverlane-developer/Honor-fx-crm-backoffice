@@ -21,7 +21,7 @@ import ViewHistory from "../../../components/HistoryTable";
 import PaymentHistoryButton from "./PaymentHistory";
 import { PaymentDetails, TransactionDetails } from "./tableHelper";
 import RefreshMultiple from "./RefreshMultiple";
-import ViewBalance from "../../PaymentGateway/View/ViewBalance";
+import ViewBalance from "../../PaymentGateway/Payout/View/ViewBalance";
 
 const statusActions = {
   pending: "retry_payout",

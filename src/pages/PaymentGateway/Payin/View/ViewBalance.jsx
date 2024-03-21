@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import propTypes from "prop-types";
 import { Col, Row, message } from "antd";
 import { EyeOutlined, EyeInvisibleOutlined, LoadingOutlined } from "@ant-design/icons";
-import getAxiosError from "../../../helpers/getAxiosError";
-import Endpoints from "../../../config/apiConstants";
-import callApi from "../../../helpers/NetworkHelper";
+import getAxiosError from "../../../../helpers/getAxiosError";
+import Endpoints from "../../../../config/apiConstants";
+import callApi from "../../../../helpers/NetworkHelper";
 
 const ViewBalance = ({ pgId }) => {
   const [showBalance, setShowBalance] = useState(false);
@@ -18,7 +18,7 @@ const ViewBalance = ({ pgId }) => {
     try {
       setShowBalance(true);
       setIsLoading(true);
-      const endpoint = Endpoints.GET_PAYMENT_GATEWAY_BALANCE;
+      const endpoint = Endpoints.GET_PAYOUT_GATEWAY_BALANCE;
       const url = `${Endpoints.BASE_URL}${endpoint.url}/${pgId}`;
       const res = await callApi(endpoint.method, url);
       const balanceRes = Number(res?.data?.data?.balance || 0).toFixed(2);

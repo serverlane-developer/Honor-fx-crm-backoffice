@@ -16,19 +16,19 @@ const CreateAdmin = lazy(() => import("../pages/Admin/Create"));
 const ViewAdmins = lazy(() => import("../pages/Admin/View"));
 const UpdateAdmin = lazy(() => import("../pages/Admin/Update"));
 
-const ViewPaymentGateways = lazy(() => import("../pages/PaymentGateway/View"));
-const UpdatePaymentGateway = lazy(() =>
-  import("../pages/PaymentGateway/Update")
-);
-const CreatePaymentGateway = lazy(() =>
-  import("../pages/PaymentGateway/Create")
-);
+// PAYOUT
+const ViewPayoutGateways = lazy(() => import("../pages/PaymentGateway/Payout/View"));
+const UpdatePayoutGateway = lazy(() => import("../pages/PaymentGateway/Payout/Update"));
+const CreatePayoutGateway = lazy(() => import("../pages/PaymentGateway/Payout/Create"));
+
+// PAYIN
+const ViewPayinGateways = lazy(() => import("../pages/PaymentGateway/Payin/View"));
+const UpdatePayinGateway = lazy(() => import("../pages/PaymentGateway/Payin/Update"));
+const CreatePayinGateway = lazy(() => import("../pages/PaymentGateway/Payin/Create"));
 
 const WithdrawList = lazy(() => import("../pages/Transaction/Withdraw"));
 const DepositList = lazy(() => import("../pages/Transaction/Deposit"));
-const CsvStatements = lazy(() =>
-  import("../pages/Transaction/Deposit/CsvStatements")
-);
+const CsvStatements = lazy(() => import("../pages/Transaction/Deposit/CsvStatements"));
 
 const CreatePanel = lazy(() => import("../pages/Panel/Create"));
 const UpdateDynamicRpa = lazy(() => import("../pages/Rpa/Update"));
@@ -137,14 +137,36 @@ const modules = [
     path: "paymentGateway",
     children: [
       getModule({
-        label: "Create Gateway",
-        path: "paymentGateway/create",
-        element: <CreatePaymentGateway />,
+        label: "Payout",
+        path: "payout",
+        children: [
+          getModule({
+            label: "Create Gateway",
+            path: "paymentGateway/payout/create",
+            element: <CreatePayoutGateway />,
+          }),
+          getModule({
+            label: "List",
+            path: "paymentGateway/payout/view",
+            element: <ViewPayoutGateways />,
+          }),
+        ],
       }),
       getModule({
-        label: "List",
-        path: "paymentGateway/view",
-        element: <ViewPaymentGateways />,
+        label: "Payin",
+        path: "payin",
+        children: [
+          getModule({
+            label: "Create Gateway",
+            path: "paymentGateway/payin/create",
+            element: <CreatePayinGateway />,
+          }),
+          getModule({
+            label: "List",
+            path: "paymentGateway/payin/view",
+            element: <ViewPayinGateways />,
+          }),
+        ],
       }),
     ],
   }),
@@ -185,7 +207,7 @@ const modules = [
         label: "List",
         path: "customer/list",
         element: <CustomerList />,
-      })
+      }),
     ],
   }),
 ];
@@ -211,9 +233,15 @@ const routesOnly = [
     routeOnly: true,
   }),
   getModule({
-    label: "Update Payment Gateway",
-    path: "paymentGateway/update/:pgid",
-    element: <UpdatePaymentGateway />,
+    label: "Update Payout Gateway",
+    path: "paymentGateway/payout/update/:pgid",
+    element: <UpdatePayoutGateway />,
+    routeOnly: true,
+  }),
+  getModule({
+    label: "Update Payin Gateway",
+    path: "paymentGateway/payin/update/:pgid",
+    element: <UpdatePayinGateway />,
     routeOnly: true,
   }),
   getModule({
@@ -235,10 +263,7 @@ const routesOnly = [
   }),
 ];
 
-const getModules = (array = []) =>
-  array
-    .map((module) => ({ ...module, element: null }))
-    .filter((x) => !x.routeOnly);
+const getModules = (array = []) => array.map((module) => ({ ...module, element: null })).filter((x) => !x.routeOnly);
 
 const getRoutesFromChildren = (children) => {
   if (!children) return false;

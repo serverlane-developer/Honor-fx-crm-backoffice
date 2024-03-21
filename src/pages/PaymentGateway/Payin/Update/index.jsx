@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { Form, message } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import Title from "../../../components/Title";
+import Title from "../../../../components/Title";
 
-import Constants from "../../../config/apiConstants";
-import callApi from "../../../helpers/NetworkHelper";
-import getAxiosError from "../../../helpers/getAxiosError";
+import Constants from "../../../../config/apiConstants";
+import callApi from "../../../../helpers/NetworkHelper";
+import getAxiosError from "../../../../helpers/getAxiosError";
 import PaymentGatewayForm from "../PaymentGatewayForm";
-import Loader from "../../../components/Loader";
+import Loader from "../../../../components/Loader";
 
 const UpdatePaymentGateway = () => {
   const { pgid } = useParams();
@@ -21,7 +21,7 @@ const UpdatePaymentGateway = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const onFinish = async (values) => {
-    const endpoint = Constants.UPDATE_PAYMENT_GATEWAY;
+    const endpoint = Constants.UPDATE_PAYOUT_GATEWAY;
     const url = `${Constants.BASE_URL}${endpoint.url}/${pgid}`;
     try {
       setIsSubmitting(true);
@@ -55,7 +55,7 @@ const UpdatePaymentGateway = () => {
     const getPaymentGatewayById = async () => {
       try {
         setIsLoading(true);
-        const endpoint = Constants.GET_PAYMENT_GATEWAY_BY_ID;
+        const endpoint = Constants.GET_PAYOUT_GATEWAY_BY_ID;
         const url = `${Constants.BASE_URL}${endpoint.url}/${pgid}`;
         const res = await callApi(endpoint.method, url);
         const data = res?.data?.data;

@@ -1,7 +1,7 @@
 import React from "react";
 import propTypes from "prop-types";
 import { Form, Input } from "antd";
-import { splitAndCapitalise } from "../../helpers/functions";
+import { splitAndCapitalise } from "../../../helpers/functions";
 
 const inputConfig = {
   CASHFREE: {
@@ -83,6 +83,30 @@ const inputConfig = {
     },
     client_id: {
       placeholder: "ISMARTPAY WALLET ID",
+      type: "password",
+    },
+  },
+  PAYANYTIME: {
+    merchant_id: {
+      placeholder: "PayAnyTime Email ID",
+      type: "password",
+    },
+    secret_key: {
+      placeholder: "PayAnyTime Password",
+      type: "password",
+    },
+  },
+  FINIXPAY: {
+    client_id: {
+      placeholder: "FINIXPAY CLIENT ID",
+      type: "password",
+    },
+    secret_key: {
+      placeholder: "FINIXPAY CLIENT SECRET KEY",
+      type: "password",
+    },
+    merchant_id: {
+      placeholder: "FINIXPAY MERCHANT ID",
       type: "password",
     },
   },

@@ -141,59 +141,24 @@ const Endpoints = {
     method: "GET",
   },
 
-  // PAYMENT GATEWAY
+  // PAYOUT GATEWAY
+  CREATE_PAYOUT_GATEWAY: { url: "/paymentGateway/payout", method: "POST" },
+  UPDATE_PAYOUT_GATEWAY: { url: "/paymentGateway/payout", method: "PUT" },
+  GET_PAYOUT_GATEWAY_BY_ID: { url: "/paymentGateway/payout", method: "GET" }, // :pg_id
+  GET_PAYOUT_GATEWAYS: { url: "/paymentGateway/payout", method: "GET" },
+  DELETE_PAYOUT_GATEWAY: { url: "/paymentGateway/payout", method: "DELETE" },
+  GET_PAYOUT_GATEWAY_BALANCE: { url: "/paymentGateway/payout/balance", method: "GET" }, // :pg_id
 
-  CREATE_PAYMENT_GATEWAY: { url: "/paymentGateway/payout", method: "POST" },
-  UPDATE_PAYMENT_GATEWAY: { url: "/paymentGateway/payout", method: "PUT" },
-  GET_PAYMENT_GATEWAY_BY_ID: { url: "/paymentGateway/payout", method: "GET" }, // :pg_id
-  GET_PAYMENT_GATEWAYS: { url: "/paymentGateway/payout", method: "GET" },
-  DELETE_PAYMENT_GATEWAY: { url: "/paymentGateway/payout", method: "DELETE" },
-  GET_PAYMENT_GATEWAY_BALANCE: {
-    url: "/paymentGateway/payout/balance",
-    method: "GET",
-  }, // :pg_id
-
-  // PANEL
-  CREATE_PANEL: { url: "/panel/management", method: "POST" },
-  GET_PANELS: { url: "/panel/management", method: "GET" },
-  GET_PANEL_BY_ID: { url: "/panel/management", method: "GET" },
-  UPDATE_PANEL: { url: "/panel/management", method: "PUT" },
-  DELETE_PANEL: { url: "/panel/management", method: "DELETE" },
-  GET_PG_DROPDOWN_FOR_PANEL: { url: "/panel/management/pg", method: "GET" },
-  GET_ASSIGNED_USERS_BY_PANEL_ID: { url: "/panel/management/assigned-users", method: "GET" }, // /:panel_id
-  GET_PANEL_HISTORY: { url: "/panel/management/history", method: "GET" }, // /:panel_id
-  GET_PANEL_TRANSACTION_STATS: { url: "/panel/management/transaction-stats", method: "GET" }, // /:panel_id
-
-  // RPA
-  UPDATE_DYNAMIC_RPA: { url: "/rpa/getDynamicRpa", method: "PUT" },
-  GET_DYNAMIC_RPA: { url: "/rpa/updateDynamicRpa", method: "GET" },
+  // PAYIN GATEWAY
+  CREATE_PAYIN_GATEWAY: { url: "/paymentGateway/payin", method: "POST" },
+  UPDATE_PAYIN_GATEWAY: { url: "/paymentGateway/payin", method: "PUT" },
+  GET_PAYIN_GATEWAY_BY_ID: { url: "/paymentGateway/payin", method: "GET" }, // :pg_id
+  GET_PAYIN_GATEWAYS: { url: "/paymentGateway/payin", method: "GET" },
+  DELETE_PAYIN_GATEWAY: { url: "/paymentGateway/payin", method: "DELETE" },
 
   // CUSTOMER
   GET_CUSTOMERS: { url: "/customer/list", method: "GET" },
   GET_CUSTOMER_BY_ID: { url: "/customer/list", method: "GET" },
-  FLAG_CUSTOMER: { url: "/customer/list/flag", method: "PUT" },
-  FLAG_CUSTOMER_ACCOUNTS: {
-    url: (customer_id) => `/customer/list/flag/${customer_id}/accounts`,
-    method: "PUT",
-  },
-  GET_CUSTOMER_ACCOUNTS: {
-    url: (customer_id) => `/customer/list/${customer_id}/accounts`,
-    method: "GET",
-  },
-  GET_CUSTOMER_PANELS: {
-    url: (customer_id) => `/customer/list/${customer_id}/panels`,
-    method: "GET",
-  },
-  GET_CUSTOMER_TRANSACTIONS: {
-    url: (customer_id) => `/customer/list/${customer_id}/transactions`,
-    method: "GET",
-  },
-  GET_CUSTOMER_TRANSACTION_DETAILED: {
-    url: (customer_id, transaction_type, transaction_id) =>
-      `/customer/list/${customer_id}/transaction/${transaction_type}/${transaction_id}`,
-    method: "GET",
-  },
-  GET_DAILY_TURNOVER: { url: "/customer/list/daily-turnover", method: "GET" },
 };
 
 export default Endpoints;

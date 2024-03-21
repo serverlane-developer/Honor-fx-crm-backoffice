@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "antd";
-import Title from "../../../components/Title";
+import Title from "../../../../components/Title";
 import PaymentGatewayTable from "./PaymentGatewayTable";
 
 const ViewPaymentGateway = () => {
