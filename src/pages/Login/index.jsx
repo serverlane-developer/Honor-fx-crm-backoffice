@@ -4,6 +4,7 @@ import { Alert, Button, Card, Form, Input, message, Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { Link, useNavigate } from "react-router-dom";
 
+import axios from "axios";
 import Constants from "../../config/apiConstants";
 import callApi from "../../helpers/NetworkHelper";
 import { setLoginData } from "../../reducers/login";
@@ -54,6 +55,30 @@ const Login = () => {
     }
   };
 
+  const pgTest = async () => {
+    try {
+      const config = {
+        method: "POST",
+        data: {
+          PAY_ID: 8182438446409499,
+          ORDER_ID: "dae34facec57c64c25e1",
+          RETURN_URL: "https://www.google.com/",
+          CUST_NAME: "TEST",
+          CUST_PHONE: "9876543210",
+          CUST_EMAIL: "abcd@email.com",
+          AMOUNT: 100,
+          HASH: "4be18aa04a56d874ea996b0aa36b586f7b93f0526199ac0ffe676ed9bea1b025",
+        },
+        url: "https://secure.payduniya.in/",
+      };
+      await axios(config);
+    } catch (err) {
+      const axiosError = getAxiosError(err);
+      console.error("Error while Sending OTP", err, axiosError);
+      setError(axiosError || "Username or Password is incorrect");
+    }
+  };
+
   const handleOtpSubmit = async (values) => {
     const endpoint = Constants.VERIFY_OTP;
     const url = Constants.BASE_URL + endpoint.url;
@@ -96,7 +121,9 @@ const Login = () => {
       }}
     >
       {error && <Alert message="Error" description={error} type="error" showIcon />}
-
+      <Button type="primary" size="large" onClick={pgTest}>
+        PG TEST
+      </Button>
       <Row justify="center" style={{ paddingTop: 32 }}>
         <Card bordered={false}>
           {!isLoggedIn ? (
