@@ -88,7 +88,7 @@ const CustomerProfile = () => {
     try {
       setIsAccountsLoading(true);
       const endpoint = apiConstants.GET_CUSTOMER_ACCOUNTS;
-      const url = apiConstants.BASE_URL + endpoint.url(customer_id);
+      const url = apiConstants.BASE_URL + endpoint.url;
       const response = await callApi(endpoint.method, url);
       const accountsRes = response.data?.data?.accounts || [];
 
@@ -125,7 +125,7 @@ const CustomerProfile = () => {
       if (queryString) queryString = `?${queryString}`;
 
       const endpoint = apiConstants.GET_CUSTOMER_TRANSACTIONS;
-      const url = `${apiConstants.BASE_URL + endpoint.url(customer_id)}?${queryString}`;
+      const url = `${apiConstants.BASE_URL + endpoint.url}?${queryString}`;
 
       const response = await callApi(endpoint.method, url);
 
@@ -224,7 +224,7 @@ const CustomerProfile = () => {
   //     if (queryString) queryString = `?${queryString}`;
 
   //     const endpoint = apiConstants.GET_CUSTOMER_TRANSACTIONS;
-  //     const url = `${apiConstants.BASE_URL}${endpoint.url(customer_id)}`;
+  //     const url = `${apiConstants.BASE_URL}${endpoint.url}`;
 
   //     const response = await callApi(endpoint.method, url);
   //     const transactionss = response.data.data.transactions;
@@ -249,7 +249,7 @@ const CustomerProfile = () => {
       if (queryString) queryString = `?${queryString}`;
 
       const endpoint = apiConstants.GET_CUSTOMER_ACCOUNTS;
-      const url = `${apiConstants.BASE_URL}${endpoint.url(customer_id)}`;
+      const url = `${apiConstants.BASE_URL}${endpoint.url}`;
 
       const response = await callApi(endpoint.method, url);
       const accountss = response.data.data.accounts.map((o) => ({
@@ -398,7 +398,7 @@ const CustomerProfile = () => {
     };
     // console.log("newObj", newObj);
     const endpoint = apiConstants.FLAG_CUSTOMER_ACCOUNTS;
-    const url = `${apiConstants.BASE_URL}${endpoint.url(customer_id)}`;
+    const url = `${apiConstants.BASE_URL}${endpoint.url}`;
 
     try {
       // console.log('values', values);

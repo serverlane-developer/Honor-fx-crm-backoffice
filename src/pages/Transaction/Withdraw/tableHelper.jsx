@@ -36,7 +36,7 @@ TransactionDetails.defaultProps = {
   canCopy: false,
 };
 
-const PaymentDetails = ({ transaction, panel_id, viewReceipt }) => (
+const PaymentDetails = ({ transaction, viewReceipt }) => (
   <div>
     <LabelValue label="Payment Gateway:" value={transaction.pg_label} />
     <LabelValue label="PG Nickname:" value={transaction.nickname} />
@@ -52,11 +52,7 @@ const PaymentDetails = ({ transaction, panel_id, viewReceipt }) => (
     {viewReceipt && (
       <LabelValue
         label="Receipt: "
-        value={
-          transaction.pg_task || transaction.is_receipt_uploaded ? (
-            <TransactionReceipt {...transaction} panel_id={panel_id} />
-          ) : null
-        }
+        value={transaction.pg_task || transaction.is_receipt_uploaded ? <TransactionReceipt {...transaction} /> : null}
       />
     )}
   </div>

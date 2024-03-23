@@ -7,7 +7,7 @@ import Endpoints from "../../../config/apiConstants";
 import callApi from "../../../helpers/NetworkHelper";
 import getAxiosError from "../../../helpers/getAxiosError";
 
-const RefreshMultiple = ({ transactions, panel_id, onSuccess }) => {
+const RefreshMultiple = ({ transactions, onSuccess }) => {
   const [isVisible, setIsVisible] = useState(false);
   const onClose = () => setIsVisible(false);
   const onOpen = () => setIsVisible(true);
@@ -23,7 +23,7 @@ const RefreshMultiple = ({ transactions, panel_id, onSuccess }) => {
       </Button>
       {isVisible && (
         <Modal title={label} open={isVisible} onCancel={onClose} footer={null} centered width="90%">
-          <RefreshList transactions={transactions} panel_id={panel_id} onSuccess={onSuccess} />
+          <RefreshList transactions={transactions} onSuccess={onSuccess} />
         </Modal>
       )}
     </Col>
@@ -31,11 +31,10 @@ const RefreshMultiple = ({ transactions, panel_id, onSuccess }) => {
 };
 RefreshMultiple.propTypes = {
   transactions: propTypes.array.isRequired,
-  panel_id: propTypes.string.isRequired,
   onSuccess: propTypes.func.isRequired,
 };
 
-const RefreshList = ({ transactions, panel_id, onSuccess }) => {
+const RefreshList = ({ transactions, onSuccess }) => {
   const [selected, setSelected] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,7 +54,7 @@ const RefreshList = ({ transactions, panel_id, onSuccess }) => {
       title: "Payment Details",
       dataIndex: "payment",
       key: "transaction_name",
-      render: (___, row) => <PaymentDetails transaction={row} panel_id={panel_id} viewReceipt={false} />,
+      render: (___, row) => <PaymentDetails transaction={row} viewReceipt={false} />,
     },
   ];
 
@@ -67,7 +66,7 @@ const RefreshList = ({ transactions, panel_id, onSuccess }) => {
     try {
       setIsLoading(true);
       const endpoint = Endpoints.REFRESH_MULTIPLE_PAYMENT_STATUS;
-      const url = `${Endpoints.BASE_URL}/${endpoint.url(panel_id)}`;
+      const url = `${Endpoints.BASE_URL}/${endpoint.url}`;
       const { data } = await callApi(endpoint.method, url, { pg_order_ids: selected });
 
       message.success(data?.message);
@@ -124,7 +123,6 @@ const RefreshList = ({ transactions, panel_id, onSuccess }) => {
 };
 RefreshList.propTypes = {
   transactions: propTypes.array.isRequired,
-  panel_id: propTypes.string.isRequired,
   onSuccess: propTypes.func.isRequired,
 };
 

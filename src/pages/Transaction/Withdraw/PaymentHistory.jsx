@@ -8,7 +8,7 @@ import DataTable from "../../../components/DataTable";
 import { formatTimestamp, splitAndCapitalise } from "../../../helpers/functions";
 import TransactionAction from "./TransactionActions";
 
-const PaymentHistoryButton = ({ transactionId, panel_id }) => {
+const PaymentHistoryButton = ({ transactionId }) => {
   const [isVisible, setIsVisible] = useState(false);
   const onClose = () => setIsVisible(false);
   const onOpen = () => setIsVisible(true);
@@ -31,7 +31,7 @@ const PaymentHistoryButton = ({ transactionId, panel_id }) => {
           centered
           width="90%"
         >
-          <PgOrderIdHistory transactionId={transactionId} panel_id={panel_id} />
+          <PgOrderIdHistory transactionId={transactionId} />
         </Modal>
       )}
     </Col>
@@ -39,7 +39,6 @@ const PaymentHistoryButton = ({ transactionId, panel_id }) => {
 };
 PaymentHistoryButton.propTypes = {
   transactionId: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 const PgOrderIdHistory = ({ transactionId, panel_id }) => {
@@ -104,9 +103,7 @@ const PgOrderIdHistory = ({ transactionId, panel_id }) => {
     title: "Refresh Status",
     dataIndex: "pg_order_id",
     key: "status_refresh",
-    render: (value) => (
-      <TransactionAction action="refresh_pg_status" id={value} panel_id={panel_id} onSuccess={getPgOrderIdHistory} />
-    ),
+    render: (value) => <TransactionAction action="refresh_pg_status" id={value} onSuccess={getPgOrderIdHistory} />,
   };
 
   columns = [...columns, paymentCreationDate, createdAt, updatedAt, refreshStatusColumn];

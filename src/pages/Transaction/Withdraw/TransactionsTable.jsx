@@ -26,11 +26,9 @@ import ViewBalance from "../../PaymentGateway/Payout/View/ViewBalance";
 const statusActions = {
   pending: "retry_payout",
   processing: "refresh_status",
-  success: "retry_rpa",
-  failed: "retry_rpa",
 };
 
-const TransactionsTable = ({ status, panel_id, pg_id }) => {
+const TransactionsTable = ({ status, pg_id }) => {
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +58,7 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
       if (queryString) queryString = `?${queryString}`;
 
       const endpoint = apiConstants.GET_WITHDRAW_TRANSACTIONS_BY_STATUS;
-      const url = `${apiConstants.BASE_URL + endpoint.url(panel_id)}/${status}${queryString}`;
+      const url = `${apiConstants.BASE_URL + endpoint.url}/${status}${queryString}`;
 
       const response = await callApi(endpoint.method, url);
 
@@ -113,7 +111,7 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
       title: "Payment Details",
       dataIndex: "payment",
       key: "transaction_name",
-      render: (___, row) => <PaymentDetails transaction={row} panel_id={panel_id} />,
+      render: (___, row) => <PaymentDetails transaction={row} />,
     },
   ];
 
@@ -153,8 +151,7 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
     title: "Update Status",
     dataIndex: "transaction_id",
     key: "transaction_id_status_update",
-    render: (value) =>
-      value && <UpdateTransactionStatus transactionId={value} panel_id={panel_id} isModal onSuccess={initialise} />,
+    render: (value) => value && <UpdateTransactionStatus transactionId={value} isModal onSuccess={initialise} />,
   };
   if (status === "pending") columns.push(statusUpdateCol);
 
@@ -172,11 +169,9 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
 
       return (
         <div>
-          {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} panel_id={panel_id} />}
+          {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
           <div style={{ margin: "12px 0" }}>
-            {status === "success" && (
-              <TransactionAction action="acknowledge" id={id} onSuccess={initialise} panel_id={panel_id} />
-            )}
+            {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
           </div>
         </div>
       );
@@ -191,10 +186,10 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
     render: (_, row) => (
       <div style={{ textAlign: "center" }}>
         <div style={{ paddingBottom: 6 }}>
-          <ViewHistory id={row.transaction_id} type="withdraw" panel_id={panel_id} />
+          <ViewHistory id={row.transaction_id} type="withdraw" />
         </div>
         <div style={{ paddingTop: 6 }}>
-          <PaymentHistoryButton transactionId={row.transaction_id} panel_id={panel_id} />
+          <PaymentHistoryButton transactionId={row.transaction_id} />
         </div>
       </div>
     ),
@@ -228,9 +223,7 @@ const TransactionsTable = ({ status, panel_id, pg_id }) => {
           </Tooltip>
         </Col>
         <Col span={12} style={{ textAlign: "right" }}>
-          {status === "processing" && (
-            <RefreshMultiple transactions={transactions} panel_id={panel_id} onSuccess={initialise} />
-          )}
+          {status === "processing" && <RefreshMultiple transactions={transactions} onSuccess={initialise} />}
           {["success", "acknowledged"].includes(status) && (
             <Input.Search
               loading={isLoading}

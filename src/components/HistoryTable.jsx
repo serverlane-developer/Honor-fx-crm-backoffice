@@ -54,7 +54,7 @@ const flexRowCenter = {
   alignItems: "center",
 };
 
-const ViewHistory = ({ id, type, panel_id }) => {
+const ViewHistory = ({ id, type }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -99,7 +99,7 @@ const ViewHistory = ({ id, type, panel_id }) => {
               </div>
             }
           >
-            <HistoryViewer id={id} type={type} panel_id={panel_id} />
+            <HistoryViewer id={id} type={type} />
           </Modal>
         </div>
       )}
@@ -109,7 +109,6 @@ const ViewHistory = ({ id, type, panel_id }) => {
 ViewHistory.propTypes = {
   type: historyType.isRequired,
   id: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 const getUrl = (type, id, panel_id) => {

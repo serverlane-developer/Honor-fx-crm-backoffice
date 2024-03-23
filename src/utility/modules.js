@@ -28,7 +28,6 @@ const CreatePayinGateway = lazy(() => import("../pages/PaymentGateway/Payin/Crea
 
 const WithdrawList = lazy(() => import("../pages/Transaction/Withdraw"));
 const DepositList = lazy(() => import("../pages/Transaction/Deposit"));
-const CsvStatements = lazy(() => import("../pages/Transaction/Deposit/CsvStatements"));
 
 const CreatePanel = lazy(() => import("../pages/Panel/Create"));
 const UpdateDynamicRpa = lazy(() => import("../pages/Rpa/Update"));
@@ -255,11 +254,6 @@ const routesOnly = [
     path: "customer/profile/:customer_id",
     element: <CustomerProfile />,
     routeOnly: true,
-  }),
-  getModule({
-    label: "ShowDepositTransactions",
-    path: "transaction/deposit/csv-statement/:panel_id",
-    element: <CsvStatements />,
   }),
 ];
 

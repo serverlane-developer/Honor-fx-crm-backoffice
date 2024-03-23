@@ -15,7 +15,7 @@ const actions = {
 
 const allowedActions = Object.keys(actions);
 
-const TransactionActions = ({ action, id, onSuccess, panel_id }) => {
+const TransactionActions = ({ action, id, onSuccess }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,7 +40,7 @@ const TransactionActions = ({ action, id, onSuccess, panel_id }) => {
   const { label, endpoint } = actionConfig;
 
   const onToggle = async (transactionId) => {
-    const url = `${Endpoints.BASE_URL}/${endpoint.url(panel_id)}/${transactionId}`;
+    const url = `${Endpoints.BASE_URL}/${endpoint.url}/${transactionId}`;
     const { data } = await callApi(endpoint.method, url);
     return data;
   };
@@ -82,7 +82,6 @@ TransactionActions.propTypes = {
   action: propTypes.oneOf(allowedActions).isRequired,
   id: propTypes.string.isRequired,
   onSuccess: propTypes.func.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 export default TransactionActions;

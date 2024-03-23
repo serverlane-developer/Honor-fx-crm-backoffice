@@ -9,16 +9,15 @@ import Endpoints from "../../../config/apiConstants";
 import callApi from "../../../helpers/NetworkHelper";
 import getAxiosError from "../../../helpers/getAxiosError";
 
-const UpdateTransactionStatus = ({ isModal, transactionId, onSuccess, panel_id }) =>
+const UpdateTransactionStatus = ({ isModal, transactionId, onSuccess }) =>
   isModal ? (
-    <UpdateStatusModal transactionId={transactionId} panel_id={panel_id} onSuccess={onSuccess} />
+    <UpdateStatusModal transactionId={transactionId} onSuccess={onSuccess} />
   ) : (
-    <UpdateStatusForm transactionId={transactionId} panel_id={panel_id} onSuccess={onSuccess} />
+    <UpdateStatusForm transactionId={transactionId} onSuccess={onSuccess} />
   );
 UpdateTransactionStatus.propTypes = {
   isModal: propTypes.bool,
   transactionId: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
   onSuccess: propTypes.func,
 };
 UpdateTransactionStatus.defaultProps = {
@@ -26,7 +25,7 @@ UpdateTransactionStatus.defaultProps = {
   onSuccess: () => {},
 };
 
-const UpdateStatusModal = ({ transactionId, onSuccess, panel_id }) => {
+const UpdateStatusModal = ({ transactionId, onSuccess }) => {
   const [isVisible, setIsVisible] = useState(false);
   const onClose = () => setIsVisible(false);
   const onOpen = () => setIsVisible(true);
@@ -40,7 +39,7 @@ const UpdateStatusModal = ({ transactionId, onSuccess, panel_id }) => {
     <div>
       {isVisible && (
         <Modal title="Update Transaction Status" open={isVisible} onCancel={onClose} footer={null} centered>
-          <UpdateStatusForm transactionId={transactionId} onSuccess={onSuccessLocal} panel_id={panel_id} />
+          <UpdateStatusForm transactionId={transactionId} onSuccess={onSuccessLocal} />
         </Modal>
       )}
       <Button type="primary" onClick={onOpen} size="large">
@@ -51,14 +50,13 @@ const UpdateStatusModal = ({ transactionId, onSuccess, panel_id }) => {
 };
 UpdateStatusModal.propTypes = {
   transactionId: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
   onSuccess: propTypes.func,
 };
 UpdateStatusModal.defaultProps = {
   onSuccess: () => {},
 };
 
-const UpdateStatusForm = ({ transactionId, onSuccess, panel_id }) => {
+const UpdateStatusForm = ({ transactionId, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileList, setFileList] = useState([]);
 
@@ -78,7 +76,7 @@ const UpdateStatusForm = ({ transactionId, onSuccess, panel_id }) => {
   const onFinish = async (values) => {
     let newValues = { ...values };
     const endpoint = Endpoints.UPDATE_WITHDRAW_TRANSACTION_STATUS;
-    const url = `${Endpoints.BASE_URL}${endpoint.url(panel_id)}/${transactionId}`;
+    const url = `${Endpoints.BASE_URL}${endpoint.url}/${transactionId}`;
     try {
       setIsSubmitting(true);
       if (fileList.length) {
@@ -200,7 +198,6 @@ const UpdateStatusForm = ({ transactionId, onSuccess, panel_id }) => {
 
 UpdateStatusForm.propTypes = {
   transactionId: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
   onSuccess: propTypes.func,
 };
 UpdateStatusForm.defaultProps = {

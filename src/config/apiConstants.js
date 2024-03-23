@@ -58,51 +58,51 @@ const Endpoints = {
     method: "GET",
   },
   GET_WITHDRAW_TRANSACTION_BY_ID: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}`,
+    url: `/transaction/withdraw`,
     method: "GET",
   }, // params /:transaction_id
   GET_WITHDRAW_TRANSACTIONS_BY_STATUS: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}`,
+    url: `/transaction/withdraw`,
     method: "GET",
   }, // params /:status
   UPDATE_WITHDRAW_TRANSACTION_STATUS: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/status`,
+    url: `/transaction/withdraw/status`,
     method: "PUT",
   }, // params /:transaction_id
   RETRY_WITHDRAW_TRANSACTION_ON_RPA: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/retry/rpa`,
+    url: `/transaction/withdraw/retry/rpa`,
     method: "POST",
   }, // params /:transaction_id
   RETRY_WITHDRAW_TRANSACTION_ON_PAYOUT: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/retry/payout`,
+    url: `/transaction/withdraw/retry/payout`,
     method: "POST",
   }, // params /:transaction_id
   REFRESH_PAYMENT_STATUS: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/payout-status`,
+    url: `/transaction/withdraw/payout-status`,
     method: "PUT",
   }, // params /:pg_order_id
   REFRESH_MULTIPLE_PAYMENT_STATUS: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/payout-status`,
+    url: `/transaction/withdraw/payout-status`,
     method: "PUT",
   }, // body { pg_rder_ids: pg_order_id[] }
   REFRESH_PG_WITHDRAW_TRANSACTION_STATUS: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/pg-transaction-status`,
+    url: `/transaction/withdraw/pg-transaction-status`,
     method: "PUT",
   }, // params /:pg_order_id
   GET_WITHDRAW_TRANSACTION_HISTORY_BY_ID: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/history`,
+    url: `/transaction/withdraw/history`,
     method: "GET",
   }, // params /:transaction_id
   GET_PAYMENT_HISTORY: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/payment-history`,
+    url: `/transaction/withdraw/payment-history`,
     method: "GET",
   }, // params /:transaction_id
   VIEW_WITHDRAW_TRANSACTION_RECEIPT: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/receipt`,
+    url: `/transaction/withdraw/receipt`,
     method: "GET",
   }, // params /:transaction_id
   ACKNOWLEDGE_WITHDRAW_TRANSACTION: {
-    url: (panel_id) => `/transaction/withdraw/${panel_id}/acknowledge`,
+    url: `/transaction/withdraw/acknowledge`,
     method: "POST",
   }, // params /:transaction_id
   GET_PANELS_STATS: { url: "/transaction/withdraw/panel-stats", method: "GET" },
@@ -113,31 +113,31 @@ const Endpoints = {
     method: "GET",
   },
   GET_DEPOSIT_TRANSACTION_BY_ID: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}`,
+    url: `/transaction/deposit`,
     method: "GET",
   }, // params /:transaction_id
   GET_DEPOSIT_TRANSACTIONS_BY_STATUS: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}`,
+    url: `/transaction/deposit`,
     method: "GET",
   }, // params /:status
   UPDATE_DEPOSIT_TRANSACTION_STATUS: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}/status`,
+    url: `/transaction/deposit/status`,
     method: "PUT",
   }, // params /:transaction_id
   RETRY_DEPOSIT_TRANSACTION_ON_RPA: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}/retry/rpa`,
+    url: `/transaction/deposit/retry/rpa`,
     method: "POST",
   }, // params /:transaction_id
   GET_DEPOSIT_TRANSACTION_HISTORY_BY_ID: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}/history`,
+    url: `/transaction/deposit/history`,
     method: "GET",
   }, // params /:transaction_id
   VERIFY_DEPOSIT_TRANSACTION: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}/verify`,
+    url: `/transaction/deposit/verify`,
     method: "POST",
   },
   SHOW_CSV_STATEMENT: {
-    url: (panel_id) => `/transaction/deposit/${panel_id}/csv-statement`,
+    url: `/transaction/deposit/csv-statement`,
     method: "GET",
   },
 

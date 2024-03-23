@@ -25,7 +25,6 @@ const TransactionReceipt = ({
   amount,
   account_number,
   ifsc,
-  panel_id,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -53,7 +52,7 @@ const TransactionReceipt = ({
               }}
             />
           ) : (
-            <ReceiptImg id={transaction_id} panel_id={panel_id} />
+            <ReceiptImg id={transaction_id} />
           )}
         </Modal>
       )}
@@ -67,14 +66,13 @@ TransactionReceipt.propTypes = {
   transaction_id: propTypes.string.isRequired,
   pg_task: propTypes.bool.isRequired,
   is_receipt_uploaded: propTypes.bool.isRequired,
-  panel_id: propTypes.string.isRequired,
   ...paymentDetailsPropType,
 };
 TransactionReceipt.defaultProps = {
   ...paymentDetails,
 };
 
-export const ReceiptImg = ({ id, panel_id }) => {
+export const ReceiptImg = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [blob, setBlob] = useState(null);
   const [src, setSrc] = useState(null);
@@ -84,7 +82,7 @@ export const ReceiptImg = ({ id, panel_id }) => {
       try {
         setIsLoading(true);
         const endpoint = Endpoints.VIEW_WITHDRAW_TRANSACTION_RECEIPT;
-        const url = `${Endpoints.BASE_URL}${endpoint.url(panel_id)}/${id}`;
+        const url = `${Endpoints.BASE_URL}${endpoint.url}/${id}`;
 
         const response = await callApi(endpoint.method, url, undefined, undefined, {
           responseType: "blob",
@@ -98,7 +96,7 @@ export const ReceiptImg = ({ id, panel_id }) => {
       }
     };
     initialise();
-  }, [id, panel_id]);
+  }, [id]);
 
   useEffect(() => {
     const onCopy = () => {
@@ -128,7 +126,6 @@ export const ReceiptImg = ({ id, panel_id }) => {
 };
 ReceiptImg.propTypes = {
   id: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 export default TransactionReceipt;

@@ -49,10 +49,7 @@ const ViewTransactions = () => {
       {isLoading ? (
         <Loader message="Loading Panels" />
       ) : !panels.length ? (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="NO Panels Found"
-        />
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="NO Panels Found" />
       ) : (
         // <Tabs
         //   destroyInactiveTabPane
@@ -70,7 +67,6 @@ const ViewTransactions = () => {
         //       key: panel_id,
         //       children: (
         //         <CustomerList
-        //           panel_id={panel_id}
         //         />
         //       ),
         //     };

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import propTypes from "prop-types";
 import lo from "lodash";
-import { useNavigate } from "react-router-dom";
 
 import { Button, Col, Input, Row, Tooltip, message } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
@@ -11,7 +10,6 @@ import callApi from "../../../helpers/NetworkHelper";
 
 import getAxiosError from "../../../helpers/getAxiosError";
 
-import UpdateTransactionStatus from "./TableModals/UpdateTransactionStatus";
 import Loader from "../../../components/Loader";
 import DataTable from "../../../components/DataTable";
 import LabelValue from "../../../components/LabelValue";
@@ -20,8 +18,6 @@ import { objectToQueryString } from "../../../helpers/url";
 import ViewHistory from "../../../components/HistoryTable";
 import CopyDetails from "../Withdraw/CopyDetails";
 // import TransactionAction from "./TransactionActions";
-import CsvModal from "./UploadCsv/CsvModal";
-import ShowCsvModal from "./TableModals/ShowCsvModal";
 import TransactionAction from "./TransactionActions";
 
 const statusActions = {
@@ -31,11 +27,7 @@ const statusActions = {
   failed: "retry_rpa",
 };
 
-const TransactionsTable = ({ status, panel_id }) => {
-  const navigate = useNavigate();
-  const [csvModelVisible, setCsvModelVisible] = useState(false);
-  const [showCsvVisible, setShowCsvVisible] = useState(false);
-  const [showCsvObj, setShowCsvObj] = useState({});
+const TransactionsTable = ({ status }) => {
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,9 +57,7 @@ const TransactionsTable = ({ status, panel_id }) => {
       if (queryString) queryString = `?${queryString}`;
 
       const endpoint = apiConstants.GET_DEPOSIT_TRANSACTIONS_BY_STATUS;
-      const url = `${
-        apiConstants.BASE_URL + endpoint.url(panel_id)
-      }/${status}${queryString}`;
+      const url = `${apiConstants.BASE_URL + endpoint.url}/${status}${queryString}`;
 
       const response = await callApi(endpoint.method, url);
 
@@ -89,9 +79,7 @@ const TransactionsTable = ({ status, panel_id }) => {
       const count = Number(res.headers["x-total-count"] || 0);
       setTotal(count);
     } catch (error) {
-      message.error(
-        getAxiosError(error) || "Error while fetching transactions"
-      );
+      message.error(getAxiosError(error) || "Error while fetching transactions");
       console.error("Error while fetching transactions", error);
     } finally {
       setIsLoading(false);
@@ -110,10 +98,7 @@ const TransactionsTable = ({ status, panel_id }) => {
       title: "Sr No",
       dataIndex: "i",
       key: "transaction_id",
-      render: (__, ___, i) =>
-        tableParams.pagination.pageSize * (tableParams.pagination.current - 1) +
-        i +
-        1,
+      render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
     },
     {
       title: "Transaction Details",
@@ -125,10 +110,7 @@ const TransactionsTable = ({ status, panel_id }) => {
           <LabelValue label="Source ID:" value={transaction.source_id} />
           <LabelValue label="Username:" value={transaction.username} />
           <LabelValue label="Account Name:" value={transaction.account_name} />
-          <LabelValue
-            label="Account Number:"
-            value={transaction.account_number}
-          />
+          <LabelValue label="Account Number:" value={transaction.account_number} />
           <LabelValue label="IFSC:" value={transaction.ifsc} />
           <LabelValue label="Amount:" value={transaction.amount} />
           <LabelValue label="Date:" value={transaction.date} />
@@ -152,35 +134,6 @@ const TransactionsTable = ({ status, panel_id }) => {
   };
   columns.push(utrCol);
 
-  const csvDataCol = {
-    title: "CSV Data",
-    dataIndex: "csv_data",
-    key: "csv_data",
-    render: (___, row) => {
-      const csvInfo = row?.csv_related_info
-        ? JSON.parse(row.csv_related_info)
-        : null;
-      if (csvInfo?.data) csvInfo.data = JSON.stringify(csvInfo.data);
-      return (
-        <div>
-          <LabelValue label="Particulars" value={row?.particulars} />
-          {csvInfo && (
-            <Button
-              type="primary"
-              onClick={() => {
-                setShowCsvVisible(true);
-                setShowCsvObj(csvInfo);
-              }}
-            >
-              Show CSV Details
-            </Button>
-          )}
-        </div>
-      );
-    },
-  };
-  if (["success"].includes(status)) columns.push(csvDataCol);
-
   const rpaCol = {
     title: "RPA",
     dataIndex: "rpa",
@@ -202,24 +155,15 @@ const TransactionsTable = ({ status, panel_id }) => {
       <div>
         {/* <LabelValue label="Created By:" value={row.created_by} /> */}
         {row.created_at && (
-          <LabelValue
-            label="Created At:"
-            value={moment(row.created_at).format(appConstants.dateFormat)}
-          />
+          <LabelValue label="Created At:" value={moment(row.created_at).format(appConstants.dateFormat)} />
         )}
         {/* <LabelValue label="Updated By:" value={row.updated_by} /> */}
         {row.updated_at && (
-          <LabelValue
-            label="Updated At:"
-            value={moment(row.updated_at).format(appConstants.dateFormat)}
-          />
+          <LabelValue label="Updated At:" value={moment(row.updated_at).format(appConstants.dateFormat)} />
         )}
 
         {row.verified_at && (
-          <LabelValue
-            label="Verified at"
-            value={moment(row.verified_at).format(appConstants.dateFormat)}
-          />
+          <LabelValue label="Verified at" value={moment(row.verified_at).format(appConstants.dateFormat)} />
         )}
         <LabelValue label="Verified By" value={row.verified_by} />
       </div>
@@ -231,15 +175,8 @@ const TransactionsTable = ({ status, panel_id }) => {
     title: "Update Status",
     dataIndex: "transaction_id",
     key: "transaction_id_status_update",
-    render: (value) =>
-      value && (
-        <UpdateTransactionStatus
-          transactionId={value}
-          panel_id={panel_id}
-          isModal
-          onSuccess={initialise}
-        />
-      ),
+    // render: (value) =>
+    // value && <UpdateTransactionStatus transactionId={value}  isModal onSuccess={initialise} />,
   };
   if (status === "pending") columns.push(statusUpdateCol);
 
@@ -251,31 +188,15 @@ const TransactionsTable = ({ status, panel_id }) => {
       const action = statusActions[status];
       const id = status === "processing" ? row.pg_order_id : value;
 
-      const canRetryRpa = ["pending", "processing"].includes(status)
-        ? true
-        : [null, "failed"].includes(row.rpa_status);
+      const canRetryRpa = ["pending", "processing"].includes(status) ? true : [null, "failed"].includes(row.rpa_status);
 
       const hideAction = !action || !id || !canRetryRpa;
 
       return (
         <div>
-          {!hideAction && (
-            <TransactionAction
-              action={action}
-              id={id}
-              onSuccess={initialise}
-              panel_id={panel_id}
-            />
-          )}
+          {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
           <div style={{ margin: "12px 0" }}>
-            {status === "success" && (
-              <TransactionAction
-                action="acknowledge"
-                id={id}
-                onSuccess={initialise}
-                panel_id={panel_id}
-              />
-            )}
+            {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
           </div>
         </div>
       );
@@ -290,11 +211,7 @@ const TransactionsTable = ({ status, panel_id }) => {
     render: (_, row) => (
       <div style={{ textAlign: "center" }}>
         <div style={{ paddingBottom: 6 }}>
-          <ViewHistory
-            id={row.transaction_id}
-            type="deposit"
-            panel_id={panel_id}
-          />
+          <ViewHistory id={row.transaction_id} type="deposit" />
         </div>
       </div>
     ),
@@ -320,43 +237,8 @@ const TransactionsTable = ({ status, panel_id }) => {
         <Col span={12} style={{ fontWeight: 600, fontSize: 16 }}>
           [{total}] {lo.capitalize(status)} Transactions
           <Tooltip title="Refresh List">
-            <Button
-              icon={<SyncOutlined />}
-              onClick={initialise}
-              style={{ marginLeft: 12 }}
-              type="primary"
-            />
+            <Button icon={<SyncOutlined />} onClick={initialise} style={{ marginLeft: 12 }} type="primary" />
           </Tooltip>
-        </Col>
-        <Col span={6}>
-          {status === "pending" && (
-            <Row>
-              <Col span={12}>
-                <Button type="primary" onClick={() => setCsvModelVisible(true)}>
-                  Upload CSV
-                </Button>
-                {csvModelVisible && (
-                  <CsvModal
-                    visible={csvModelVisible}
-                    setVisible={setCsvModelVisible}
-                    panel_id={panel_id}
-                  />
-                )}
-              </Col>
-              <Col span={12}>
-                <Button
-                  type="primary"
-                  onClick={() =>
-                    navigate(
-                      `/transaction/deposit/csv-statement/${panel_id}?staus=${status}`
-                    )
-                  }
-                >
-                  Show CSV Statements
-                </Button>
-              </Col>
-            </Row>
-          )}
         </Col>
         <Col span={6} style={{ textAlign: "right" }}>
           {["success", "acknowledged"].includes(status) && (
@@ -387,26 +269,11 @@ const TransactionsTable = ({ status, panel_id }) => {
         style={{ width: "100%" }}
         width="100%"
       />
-      {showCsvVisible && (
-        <ShowCsvModal
-          csvObj={showCsvObj}
-          visible={showCsvVisible}
-          setVisible={setShowCsvVisible}
-        />
-      )}
     </div>
   );
 };
 TransactionsTable.propTypes = {
-  status: propTypes.oneOf([
-    "pending",
-    "processing",
-    "success",
-    "failed",
-    "refund",
-    "acknowledged",
-  ]).isRequired,
-  panel_id: propTypes.string.isRequired,
+  status: propTypes.oneOf(["pending", "processing", "success", "failed", "refund", "acknowledged"]).isRequired,
 };
 
 export default TransactionsTable;
