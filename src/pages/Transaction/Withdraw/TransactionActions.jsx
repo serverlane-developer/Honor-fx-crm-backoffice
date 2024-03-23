@@ -19,9 +19,9 @@ const actions = {
     label: "Refresh Payment Status",
     endpoint: Endpoints.REFRESH_PAYMENT_STATUS,
   },
-  acknowledge: {
-    label: "Acknowledge Transaction",
-    endpoint: Endpoints.ACKNOWLEDGE_WITHDRAW_TRANSACTION,
+  refund: {
+    label: "Refund Transaction",
+    endpoint: Endpoints.REFUND_WITHDRAW_TRANSACTION,
   },
   refresh_pg_status: {
     label: "Refresh Pg Transaction Status",

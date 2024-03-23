@@ -101,11 +101,10 @@ const Endpoints = {
     url: `/transaction/withdraw/receipt`,
     method: "GET",
   }, // params /:transaction_id
-  ACKNOWLEDGE_WITHDRAW_TRANSACTION: {
-    url: `/transaction/withdraw/acknowledge`,
+  REFUND_WITHDRAW_TRANSACTION: {
+    url: `/transaction/withdraw/refund`,
     method: "POST",
   }, // params /:transaction_id
-  GET_PANELS_STATS: { url: "/transaction/withdraw/panel-stats", method: "GET" },
 
   // DEPOSIT
   GET_PANELS_FOR_DEPOSIT_TRANSACTION: {

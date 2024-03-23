@@ -192,10 +192,18 @@ const TransactionsTable = ({ status, pg_id }) => {
       // const action = statusActions[status];
       const { pg_order_id } = row;
 
-      return pg_order_id ? (
-        <TransactionAction action="refresh_status" id={pg_order_id} onSuccess={initialise} />
-      ) : (
-        <TransactionAction action="retry_payout" id={row.transaction_id} onSuccess={initialise} />
+      return (
+        <>
+          {" "}
+          {pg_order_id ? (
+            <TransactionAction action="refresh_status" id={pg_order_id} onSuccess={initialise} />
+          ) : (
+            <TransactionAction action="retry_payout" id={row.transaction_id} onSuccess={initialise} />
+          )}
+          {row.payout_status === "failed" && (
+            <TransactionAction action="refund" id={row.transaction_id} onSuccess={initialise} />
+          )}
+        </>
       );
     },
   };
