@@ -23,10 +23,10 @@ import { PaymentDetails, TransactionDetails } from "./tableHelper";
 import RefreshMultiple from "./RefreshMultiple";
 import ViewBalance from "../../PaymentGateway/Payout/View/ViewBalance";
 
-const statusActions = {
-  // pending: "",
-  processing: "retry_payout",
-};
+// const statusActions = {
+//   // pending: "",
+//   processing: "retry_payout",
+// };
 
 const TransactionsTable = ({ status, pg_id }) => {
   const [transactions, setTransactions] = useState([]);
@@ -115,18 +115,47 @@ const TransactionsTable = ({ status, pg_id }) => {
     },
   ];
 
-  const rpaCol = {
-    title: "RPA",
-    dataIndex: "rpa",
-    key: "rpa",
+  const mt5Col = {
+    title: "MT5",
+    dataIndex: "mt5",
+    key: "mt5",
     render: (___, row) => (
       <div>
-        <LabelValue label="RPA Status" value={row.rpa_status} />
-        <LabelValue label="RPA Message" value={row.rpa_message} />
+        <LabelValue label="Deal ID" value={row.dealid} />
       </div>
     ),
   };
-  if (["success"].includes(status)) columns.push(rpaCol);
+  if (["success", "processing"].includes(status)) columns.push(mt5Col);
+
+  const statusCol = {
+    title: "Status",
+    dataIndex: "status",
+    key: "mt5",
+    render: (___, row) => (
+      <div>
+        <LabelValue label="Status" value={row.status} />
+        <LabelValue label="MT5 Status" value={row.mt5_status} />
+        <LabelValue label="Payout Status" value={row.payout_status} />
+      </div>
+    ),
+  };
+  // if (["success", "processing"].includes(status))
+  columns.push(statusCol);
+
+  const messageCol = {
+    title: "Status",
+    dataIndex: "message",
+    key: "mt5",
+    render: (___, row) => (
+      <div>
+        <LabelValue label="Message" value={row.message} />
+        <LabelValue label="MT5 Message" value={row.mt5_message} />
+        <LabelValue label="Payout Message" value={row.payout_message} />
+        <LabelValue label="Admin Message" value={row.admin_message} />
+      </div>
+    ),
+  };
+  if (["success", "processing", "failed"].includes(status)) columns.push(messageCol);
 
   const timestampsCol = {
     title: "Timestamps",
@@ -160,20 +189,13 @@ const TransactionsTable = ({ status, pg_id }) => {
     dataIndex: "transaction_id",
     key: "transaction_actions",
     render: (value, row) => {
-      const action = statusActions[status];
-      const id = status === "processing" ? row.pg_order_id : value;
+      // const action = statusActions[status];
+      const { pg_order_id } = row;
 
-      const canRetryRpa = ["pending", "processing"].includes(status) ? true : [null, "failed"].includes(row.rpa_status);
-
-      const hideAction = !action || !id || !canRetryRpa;
-
-      return (
-        <div>
-          {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
-          <div style={{ margin: "12px 0" }}>
-            {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
-          </div>
-        </div>
+      return pg_order_id ? (
+        <TransactionAction action="refresh_status" id={pg_order_id} onSuccess={initialise} />
+      ) : (
+        <TransactionAction action="retry_payout" id={row.transaction_id} onSuccess={initialise} />
       );
     },
   };

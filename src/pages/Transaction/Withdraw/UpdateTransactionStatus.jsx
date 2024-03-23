@@ -78,12 +78,9 @@ const UpdateStatusForm = ({ transactionId, onSuccess }) => {
 
       const { data: resData } = await callApi(endpoint.method, url, values);
       const { status, message: resMessage } = resData;
-      if (!status) {
-        message.error(resMessage);
-        return;
-      }
       form.resetFields();
-      message.success(resMessage);
+      if (!status) message.error(resMessage);
+      else message.success(resMessage);
       if (typeof onFinish === "function") onSuccess();
     } catch (err) {
       const axiosError = getAxiosError(err);

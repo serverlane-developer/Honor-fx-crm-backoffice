@@ -14,8 +14,8 @@ const TransactionDetails = ({ transaction, canCopy }) => (
     <LabelValue label="Account Name:" value={transaction.account_name} />
     <LabelValue label="Account Number:" value={transaction.account_number} />
     <LabelValue label="IFSC:" value={transaction.ifsc} />
+    <LabelValue label="UPI ID:" value={transaction.upi_id} />
     <LabelValue label="Date:" value={transaction.date} />
-    <LabelValue label="Type:" value={transaction.transaction_type} />
     {canCopy && <CopyDetails {...transaction} />}
   </div>
 );
@@ -28,7 +28,7 @@ TransactionDetails.propTypes = {
     account_number: propTypes.string.isRequired,
     ifsc: propTypes.string.isRequired,
     date: propTypes.string.isRequired,
-    transaction_type: propTypes.string.isRequired,
+    upi_id: propTypes.string.isRequired,
   }).isRequired,
   canCopy: propTypes.bool,
 };
