@@ -113,6 +113,17 @@ const TransactionsTable = ({ status, pg_id }) => {
       key: "transaction_name",
       render: (___, row) => <PaymentDetails transaction={row} />,
     },
+    {
+      title: "Customer",
+      dataIndex: "created_by",
+      key: "created_by",
+      render: (___, row) => (
+        <div>
+          <LabelValue label="Username:" value={row.created_by} />
+          <LabelValue label="Phone:" value={row.phone_number} />
+        </div>
+      ),
+    },
   ];
 
   const mt5Col = {
