@@ -101,6 +101,11 @@ const TransactionsTable = ({ status }) => {
       render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
     },
     {
+      title: "Type",
+      dataIndex: "transaction_type",
+      key: "transaction_type",
+    },
+    {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
@@ -111,6 +116,58 @@ const TransactionsTable = ({ status }) => {
       key: "created_by",
     },
   ];
+
+  const mt5Col = {
+    title: "MT5",
+    dataIndex: "mt5",
+    key: "mt5",
+    render: (___, row) => (
+      <div>
+        <LabelValue label="Deal ID" value={row.dealid} />
+        <LabelValue label="Margin" value={row.margin} />
+        <LabelValue label="Freemargin" value={row.freemargin} />
+        <LabelValue label="Equity" value={row.equity} />
+      </div>
+    ),
+  };
+  if (["success", "processing"].includes(status)) columns.push(mt5Col);
+
+  const statusCol = {
+    title: "Status",
+    dataIndex: "status",
+    key: "mt5",
+    render: (___, row) => (
+      <div>
+        <LabelValue label="Status" value={row.status} />
+        <LabelValue label="MT5 Status" value={row.mt5_status} />
+        <LabelValue label="Payout Status" value={row.payout_status} />
+      </div>
+    ),
+  };
+  // if (["success", "processing"].includes(status))
+  columns.push(statusCol);
+
+  const messageCol = {
+    title: "Message",
+    dataIndex: "message",
+    key: "mt5",
+    render: (___, row) => (
+      <div>
+        <LabelValue label="Message" value={row.message} />
+        <LabelValue label="MT5 Message" value={row.mt5_message} />
+        <LabelValue label="Payout Message" value={row.payout_message} />
+        <LabelValue label="Admin Message" value={row.admin_message} />
+      </div>
+    ),
+  };
+  if (["success", "processing", "failed"].includes(status)) columns.push(messageCol);
+
+  const utrCol = {
+    title: "UTR",
+    dataIndex: "utr_id",
+    key: "utr_id",
+  };
+  if (["success", "processing"].includes(status)) columns.push(utrCol);
 
   const timestampsCol = {
     title: "Timestamps",
@@ -135,39 +192,6 @@ const TransactionsTable = ({ status }) => {
     ),
   };
   columns.push(timestampsCol);
-
-  // const statusUpdateCol = {
-  //   title: "Update Status",
-  //   dataIndex: "transaction_id",
-  //   key: "transaction_id_status_update",
-  //   // render: (value) =>
-  //   // value && <UpdateTransactionStatus transactionId={value}  isModal onSuccess={initialise} />,
-  // };
-  // if (status === "pending") columns.push(statusUpdateCol);
-
-  // const actionsCol = {
-  //   title: "Actions",
-  //   dataIndex: "transaction_id",
-  //   key: "transaction_actions",
-  //   render: (value, row) => {
-  //     const action = statusActions[status];
-  //     const id = status === "processing" ? row.pg_order_id : value;
-
-  //     const canRetryRpa = ["pending", "processing"].includes(status) ? true : [null, "failed"].includes(row.rpa_status);
-
-  //     const hideAction = !action || !id || !canRetryRpa;
-
-  //     return (
-  //       <div>
-  //         {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
-  //         <div style={{ margin: "12px 0" }}>
-  //           {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // };
-  // columns.push(actionsCol);
 
   const historyCol = {
     dataIndex: "history",
@@ -238,7 +262,7 @@ const TransactionsTable = ({ status }) => {
   );
 };
 TransactionsTable.propTypes = {
-  status: propTypes.oneOf(["pending", "processing", "success", "failed", "refund", "acknowledged"]).isRequired,
+  status: propTypes.oneOf(["pending", "processing", "success", "failed", "refund"]).isRequired,
 };
 
 export default TransactionsTable;
