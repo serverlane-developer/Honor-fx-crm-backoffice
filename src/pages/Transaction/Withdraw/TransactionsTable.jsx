@@ -122,6 +122,9 @@ const TransactionsTable = ({ status, pg_id }) => {
     render: (___, row) => (
       <div>
         <LabelValue label="Deal ID" value={row.dealid} />
+        <LabelValue label="Margin" value={row.margin} />
+        <LabelValue label="Freemargin" value={row.freemargin} />
+        <LabelValue label="Equity" value={row.equity} />
       </div>
     ),
   };
@@ -143,7 +146,7 @@ const TransactionsTable = ({ status, pg_id }) => {
   columns.push(statusCol);
 
   const messageCol = {
-    title: "Status",
+    title: "Message",
     dataIndex: "message",
     key: "mt5",
     render: (___, row) => (
@@ -194,20 +197,18 @@ const TransactionsTable = ({ status, pg_id }) => {
 
       return (
         <>
-          {" "}
           {pg_order_id ? (
             <TransactionAction action="refresh_status" id={pg_order_id} onSuccess={initialise} />
           ) : (
             <TransactionAction action="retry_payout" id={row.transaction_id} onSuccess={initialise} />
           )}
-          {row.payout_status === "failed" && (
-            <TransactionAction action="refund" id={row.transaction_id} onSuccess={initialise} />
-          )}
+          <hr />
+          <TransactionAction action="refund" id={row.transaction_id} onSuccess={initialise} />
         </>
       );
     },
   };
-  columns.push(actionsCol);
+  if (status === "processing") columns.push(actionsCol);
 
   const historyCol = {
     dataIndex: "history",
