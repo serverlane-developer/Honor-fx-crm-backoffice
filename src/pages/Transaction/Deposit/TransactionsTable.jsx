@@ -16,16 +16,16 @@ import LabelValue from "../../../components/LabelValue";
 import appConstants from "../../../config/appConstants";
 import { objectToQueryString } from "../../../helpers/url";
 import ViewHistory from "../../../components/HistoryTable";
-import CopyDetails from "../Withdraw/CopyDetails";
+// import CopyDetails from "../Withdraw/CopyDetails";
 // import TransactionAction from "./TransactionActions";
-import TransactionAction from "./TransactionActions";
+// import TransactionAction from "./TransactionActions";
 
-const statusActions = {
-  pending: "",
-  processing: "",
-  success: "retry_rpa",
-  failed: "retry_rpa",
-};
+// const statusActions = {
+//   pending: "",
+//   processing: "",
+//   success: "retry_rpa",
+//   failed: "retry_rpa",
+// };
 
 const TransactionsTable = ({ status }) => {
   const [transactions, setTransactions] = useState([]);
@@ -101,51 +101,16 @@ const TransactionsTable = ({ status }) => {
       render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
     },
     {
-      title: "Transaction Details",
-      dataIndex: "",
-      key: "transaction_name",
-      render: (__, transaction) => (
-        <div>
-          {/* <LabelValue label="Transaction ID" value={transaction.transaction_id} /> */}
-          <LabelValue label="Source ID:" value={transaction.source_id} />
-          <LabelValue label="Username:" value={transaction.username} />
-          <LabelValue label="Account Name:" value={transaction.account_name} />
-          <LabelValue label="Account Number:" value={transaction.account_number} />
-          <LabelValue label="IFSC:" value={transaction.ifsc} />
-          <LabelValue label="Amount:" value={transaction.amount} />
-          <LabelValue label="Date:" value={transaction.date} />
-          <LabelValue label="Type:" value={transaction.transaction_type} />
-          <LabelValue label="Site: " value={transaction.transaction_type} />
-          <CopyDetails {...transaction} />
-        </div>
-      ),
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+    },
+    {
+      title: "Customer",
+      dataIndex: "created_by",
+      key: "created_by",
     },
   ];
-
-  const utrCol = {
-    title: "UTR",
-    dataIndex: "utr",
-    key: "utr",
-    render: (___, row) => (
-      <div>
-        <LabelValue label="UTR Number: " value={row.utr_number} />
-      </div>
-    ),
-  };
-  columns.push(utrCol);
-
-  const rpaCol = {
-    title: "RPA",
-    dataIndex: "rpa",
-    key: "rpa",
-    render: (___, row) => (
-      <div>
-        <LabelValue label="RPA Status" value={row.rpa_status} />
-        <LabelValue label="RPA Message" value={row.rpa_message} />
-      </div>
-    ),
-  };
-  if (["success", "failed"].includes(status)) columns.push(rpaCol);
 
   const timestampsCol = {
     title: "Timestamps",
@@ -171,38 +136,38 @@ const TransactionsTable = ({ status }) => {
   };
   columns.push(timestampsCol);
 
-  const statusUpdateCol = {
-    title: "Update Status",
-    dataIndex: "transaction_id",
-    key: "transaction_id_status_update",
-    // render: (value) =>
-    // value && <UpdateTransactionStatus transactionId={value}  isModal onSuccess={initialise} />,
-  };
-  if (status === "pending") columns.push(statusUpdateCol);
+  // const statusUpdateCol = {
+  //   title: "Update Status",
+  //   dataIndex: "transaction_id",
+  //   key: "transaction_id_status_update",
+  //   // render: (value) =>
+  //   // value && <UpdateTransactionStatus transactionId={value}  isModal onSuccess={initialise} />,
+  // };
+  // if (status === "pending") columns.push(statusUpdateCol);
 
-  const actionsCol = {
-    title: "Actions",
-    dataIndex: "transaction_id",
-    key: "transaction_actions",
-    render: (value, row) => {
-      const action = statusActions[status];
-      const id = status === "processing" ? row.pg_order_id : value;
+  // const actionsCol = {
+  //   title: "Actions",
+  //   dataIndex: "transaction_id",
+  //   key: "transaction_actions",
+  //   render: (value, row) => {
+  //     const action = statusActions[status];
+  //     const id = status === "processing" ? row.pg_order_id : value;
 
-      const canRetryRpa = ["pending", "processing"].includes(status) ? true : [null, "failed"].includes(row.rpa_status);
+  //     const canRetryRpa = ["pending", "processing"].includes(status) ? true : [null, "failed"].includes(row.rpa_status);
 
-      const hideAction = !action || !id || !canRetryRpa;
+  //     const hideAction = !action || !id || !canRetryRpa;
 
-      return (
-        <div>
-          {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
-          <div style={{ margin: "12px 0" }}>
-            {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
-          </div>
-        </div>
-      );
-    },
-  };
-  columns.push(actionsCol);
+  //     return (
+  //       <div>
+  //         {!hideAction && <TransactionAction action={action} id={id} onSuccess={initialise} />}
+  //         <div style={{ margin: "12px 0" }}>
+  //           {status === "success" && <TransactionAction action="acknowledge" id={id} onSuccess={initialise} />}
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // };
+  // columns.push(actionsCol);
 
   const historyCol = {
     dataIndex: "history",

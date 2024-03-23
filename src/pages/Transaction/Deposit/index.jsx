@@ -4,7 +4,7 @@ import lo from "lodash";
 import Title from "../../../components/Title";
 import TransactionsTable from "./TransactionsTable";
 
-const StatusTabs = ["pending", "success", "failed"];
+const StatusTabs = ["pending", "processing", "success", "failed"];
 
 const Deposit = () => (
   <div>

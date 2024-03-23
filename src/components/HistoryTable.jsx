@@ -111,14 +111,13 @@ ViewHistory.propTypes = {
   id: propTypes.string.isRequired,
 };
 
-const getUrl = (type, id, panel_id) => {
+const getUrl = (type, id) => {
   if (!type) throw new Error("Type is Required");
   if (!id) throw new Error("ID is Required");
 
   const URL_BY_TXN_TYPE = {
-    withdraw: Endpoints.GET_WITHDRAW_TRANSACTION_HISTORY_BY_ID.url(panel_id),
-    deposit: Endpoints.GET_DEPOSIT_TRANSACTION_HISTORY_BY_ID.url(panel_id),
-    panel: Endpoints.GET_PANEL_HISTORY.url,
+    withdraw: Endpoints.GET_WITHDRAW_TRANSACTION_HISTORY_BY_ID.url,
+    deposit: Endpoints.GET_DEPOSIT_TRANSACTION_HISTORY_BY_ID.url,
   };
   const endpoint = URL_BY_TXN_TYPE[type];
   if (!endpoint) throw new Error(`Transaction Type should be one of ${Object.keys(URL_BY_TXN_TYPE).join(", ")}`);
@@ -126,7 +125,7 @@ const getUrl = (type, id, panel_id) => {
   return `${Endpoints.BASE_URL + endpoint}/${id}`;
 };
 
-const HistoryViewer = ({ id, type, panel_id }) => {
+const HistoryViewer = ({ id, type }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [history, setHistory] = useState(null);
@@ -135,7 +134,7 @@ const HistoryViewer = ({ id, type, panel_id }) => {
     try {
       setIsLoading(true);
       setErrorMessage("");
-      const url = getUrl(type, id, panel_id);
+      const url = getUrl(type, id);
       const res = await callApi("GET", `${url}`);
       const { data } = res;
       if (data.status) {
@@ -177,7 +176,6 @@ const HistoryViewer = ({ id, type, panel_id }) => {
 HistoryViewer.propTypes = {
   id: propTypes.string.isRequired,
   type: historyType.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 const HistoryTable = ({ history }) => {

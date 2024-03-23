@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-curly-brace-presence */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from "react";
 import propTypes from "prop-types";
-import { Button, Card, Form, Input, Modal, Radio, Row, message, Upload } from "antd";
+import { Button, Card, Form, Input, Modal, Radio, Row, message } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { UploadOutlined } from "@ant-design/icons";
 import Endpoints from "../../../config/apiConstants";
 import callApi from "../../../helpers/NetworkHelper";
 import getAxiosError from "../../../helpers/getAxiosError";
@@ -58,11 +58,8 @@ UpdateStatusModal.defaultProps = {
 
 const UpdateStatusForm = ({ transactionId, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [fileList, setFileList] = useState([]);
 
   const [form] = useForm();
-
-  const isSuccess = Form.useWatch("status", form) === "success";
 
   const layout = {
     labelCol: {
@@ -74,23 +71,12 @@ const UpdateStatusForm = ({ transactionId, onSuccess }) => {
   };
 
   const onFinish = async (values) => {
-    let newValues = { ...values };
     const endpoint = Endpoints.UPDATE_WITHDRAW_TRANSACTION_STATUS;
     const url = `${Endpoints.BASE_URL}${endpoint.url}/${transactionId}`;
     try {
       setIsSubmitting(true);
-      if (fileList.length) {
-        newValues = new FormData();
-        const objKeys = Object.keys(values);
-        for (let i = 0; i < objKeys.length; i += 1) {
-          newValues.append(objKeys[i], values[objKeys[i]]);
-        }
-        newValues.append("receipt_image", fileList[0], fileList[0].name);
-      }
 
-      const { data: resData } = await callApi(endpoint.method, url, newValues, {
-        "Content-type": "multipart/form-data",
-      });
+      const { data: resData } = await callApi(endpoint.method, url, values);
       const { status, message: resMessage } = resData;
       if (!status) {
         message.error(resMessage);
@@ -130,8 +116,8 @@ const UpdateStatusForm = ({ transactionId, onSuccess }) => {
           </Radio.Group>
         </Form.Item>
         <Form.Item
-          label={isSuccess ? "UTR" : "Message"}
-          name={isSuccess ? "utr_id" : "api_error"}
+          label={"Message"}
+          name={"message"}
           rules={[
             {
               required: true,
@@ -144,45 +130,8 @@ const UpdateStatusForm = ({ transactionId, onSuccess }) => {
             },
           ]}
         >
-          <Input placeholder={isSuccess ? "UTR" : "Message"} autoComplete="off" />
+          <Input placeholder={"Message"} autoComplete="off" />
         </Form.Item>
-
-        {form.getFieldValue().status === "success" && (
-          <Form.Item
-            name="file"
-            label="Upload"
-            // valuePropName="fileList"
-            // getValueFromEvent={normFile}
-            rules={[
-              {
-                required: false,
-              },
-            ]}
-          >
-            <Upload
-              name="file"
-              // beforeUpload={Upload.LIST_IGNORE}
-              listType="picture"
-              maxCount={1}
-              accept=".pdf"
-              // onPreview={(e) => (e?.originFileObj ? window.open(URL.createObjectURL(e?.originFileObj)) : null)}
-              // showUploadList={{ showDownloadIcon: false, showPreviewIcon: true, showRemoveIcon: true }}
-              onRemove={(file) => {
-                const index = fileList.indexOf(file);
-                const newFileList = fileList.slice();
-                newFileList.splice(index, 1);
-                setFileList(newFileList);
-              }}
-              beforeUpload={(file) => {
-                setFileList([...fileList, file]);
-                return false;
-              }}
-              fileList={fileList}
-            >
-              <Button icon={<UploadOutlined />}>Click to upload</Button>
-            </Upload>
-          </Form.Item>
-        )}
 
         <Row justify="center" align="middle">
           <Form.Item style={{ marginTop: 40 }}>

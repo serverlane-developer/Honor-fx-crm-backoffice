@@ -24,8 +24,8 @@ import RefreshMultiple from "./RefreshMultiple";
 import ViewBalance from "../../PaymentGateway/Payout/View/ViewBalance";
 
 const statusActions = {
-  pending: "retry_payout",
-  processing: "refresh_status",
+  // pending: "",
+  processing: "retry_payout",
 };
 
 const TransactionsTable = ({ status, pg_id }) => {

@@ -41,14 +41,14 @@ PaymentHistoryButton.propTypes = {
   transactionId: propTypes.string.isRequired,
 };
 
-const PgOrderIdHistory = ({ transactionId, panel_id }) => {
+const PgOrderIdHistory = ({ transactionId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState([]);
 
   const getPgOrderIdHistory = async () => {
     try {
       setIsLoading(true);
-      const url = `${Endpoints.BASE_URL + Endpoints.GET_PAYMENT_HISTORY.url(panel_id)}/${transactionId}`;
+      const url = `${Endpoints.BASE_URL + Endpoints.GET_PAYMENT_HISTORY.url}/${transactionId}`;
       let res = await callApi("get", url);
       res = res.data;
       setHistory(res.data);
@@ -131,7 +131,6 @@ const PgOrderIdHistory = ({ transactionId, panel_id }) => {
 };
 PgOrderIdHistory.propTypes = {
   transactionId: propTypes.string.isRequired,
-  panel_id: propTypes.string.isRequired,
 };
 
 export default PaymentHistoryButton;
