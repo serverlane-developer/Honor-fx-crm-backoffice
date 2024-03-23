@@ -65,7 +65,7 @@ const Sidebar = ({ theme }) => {
           textAlign: "center",
         }}
       >
-        HONOR FX
+        SUPERTRADEX
       </div>
       <Menu theme={theme} selectedKeys={selectedMenu} onClick={onMenuClick} mode="inline" items={menuItems} />
     </Sider>
