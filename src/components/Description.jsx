@@ -7,8 +7,15 @@ import React from "react";
 import propTypes from "prop-types";
 import appConstants from "../config/appConstants";
 
-const timestampKeys = ["created_at", "updated_at", "verified_at", "password_changed_at", "last_login_timestamp"];
-const booleanKeys = ["enable_two_factor_auth", "is_2fa_enabled"];
+const timestampKeys = [
+  "created_at",
+  "updated_at",
+  "verified_at",
+  "password_changed_at",
+  "last_login_timestamp",
+  "two_factor_toggled_at",
+];
+const booleanKeys = ["enable_two_factor_auth", "is_2fa_enabled", "is_pin_reset_required"];
 
 const getDescriptionValue = (key, value) => {
   if (timestampKeys.includes(key)) {

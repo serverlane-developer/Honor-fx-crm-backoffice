@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import lo from "lodash";
-import { message, Card, Tag } from "antd";
+import { message, Card, Tag, Collapse } from "antd";
 import { useParams } from "react-router-dom";
 import Title from "../../../components/Title";
 import apiConstants from "../../../config/apiConstants";
@@ -12,6 +12,8 @@ import DataTable from "../../../components/DataTable";
 import { formatTimestamp } from "../../../helpers/functions";
 import DetailedTransactionModal from "../DetailedTransaction/DetailedTransactionModal";
 import ErrorMessage from "../../../components/ErrorMessage";
+import Description from "../../../components/Description";
+import UserLoginHistory from "./UserLoginHistory";
 
 const TransactionTypeColor = {
   withdraw: "red",
@@ -123,33 +125,14 @@ const CustomerProfile = () => {
       if (response.error) {
         throw new Error(response.error);
       }
-      return response;
+      return response.data;
     } catch (error) {
       console.error(error);
       throw error;
     }
   };
 
-  useEffect(() => {
-    const initialise = async () => {
-      try {
-        setIsLoading(true);
-        const res = await getCustomerProfile();
-        setProfile(res.data || null);
-      } catch (error) {
-        message.error(getAxiosError(error) || "Error while fetching modules");
-        console.error("Error while fetching modules", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initialise();
-  }, []);
-
-  useEffect(() => {
-    initialiseTransactions();
-  }, [tableParams.pagination]);
+  const collapseItems = [{ key: "login-history", label: "Login History", children: <UserLoginHistory /> }];
 
   const columns = [
     {
@@ -205,6 +188,29 @@ const CustomerProfile = () => {
     },
   ];
 
+  useEffect(() => {
+    const initialise = async () => {
+      try {
+        setIsLoading(true);
+        const res = await getCustomerProfile();
+        setProfile(res.data || null);
+      } catch (error) {
+        message.error(getAxiosError(error) || "Error while fetching modules");
+        console.error("Error while fetching modules", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialise();
+  }, []);
+
+  useEffect(() => {
+    initialiseTransactions();
+  }, [tableParams.pagination]);
+
+  if (!customer_id) return <ErrorMessage message="Customer ID is required" />;
+
   if (isLoading) return <Loader message="Loading Customer Profile..." />;
 
   if (!profile) return <ErrorMessage message="User not Found" />;
@@ -212,6 +218,12 @@ const CustomerProfile = () => {
   return (
     <div>
       <Title title="Customer Profile" />
+      <Description items={profile} title="Profile" />
+
+      <div style={{ padding: 8 }}>
+        <Collapse items={collapseItems} size="large" />
+      </div>
+
       <Card bordered={false}>
         <DataTable
           bordered

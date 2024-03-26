@@ -167,6 +167,11 @@ const Endpoints = {
       `/users/management/${customer_id}/transaction/${transaction_type}/${transaction_id}`,
     method: "GET",
   },
+  GET_USER_LOGIN_HISTORY: {
+    url: (customer_id) =>
+      `/users/management/${customer_id}/login-history`,
+    method: "GET",
+  },
 };
 
 export default Endpoints;

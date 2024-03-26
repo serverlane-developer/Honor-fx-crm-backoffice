@@ -129,6 +129,17 @@ const CustomerList = () => {
       ),
     },
     {
+      title: "Auth",
+      dataIndex: "auth",
+      render: (_, row) => (
+        <div>
+          {row.pin_changed_at && <LabelValue label="Pin Changed At:" value={formatTimestamp(row.pin_changed_at)} />}
+          {row.last_login_ip && <LabelValue label="Last Login IP:" value={row.last_login_ip} />}
+          {row.last_login_at && <LabelValue label="Last Login At:" value={formatTimestamp(row.last_login_at)} />}
+        </div>
+      ),
+    },
+    {
       title: "View Profile",
       dataIndex: "update_module",
       key: "update_module",
