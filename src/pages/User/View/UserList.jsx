@@ -121,9 +121,7 @@ const CustomerList = () => {
       key: "created_at",
       render: (____, row) => (
         <div>
-          {/* <LabelValue label="Created By:" value={row.created_by} /> */}
           {row.created_at && <LabelValue label="Created At:" value={formatTimestamp(row.created_at)} />}
-          {/* <LabelValue label="Updated By:" value={row.updated_by} /> */}
           {row.updated_at && <LabelValue label="Updated At:" value={formatTimestamp(row.updated_at)} />}
         </div>
       ),
@@ -143,7 +141,11 @@ const CustomerList = () => {
       title: "View Profile",
       dataIndex: "update_module",
       key: "update_module",
-      render: (value, row) => <Link to={`/users/profile/${row.customer_id}`}>View Profile</Link>,
+      render: (value, row) => (
+        <Link to={`/users/profile/${row.customer_id}`} target="_blank" rel="noopener noreferrer">
+          View Profile
+        </Link>
+      ),
     },
   ];
 

@@ -172,6 +172,11 @@ const Endpoints = {
       `/users/management/${customer_id}/login-history`,
     method: "GET",
   },
+  GET_USER_MT5_USER_LIST: {
+    url: (customer_id) =>
+      `/users/management/${customer_id}/mt5-users`,
+    method: "GET",
+  },
 };
 
 export default Endpoints;
