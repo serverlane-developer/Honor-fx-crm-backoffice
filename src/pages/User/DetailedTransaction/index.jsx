@@ -16,7 +16,7 @@ const DetailedTransaction = ({ customer_id, transaction_type, transaction_id }) 
   const getTransactionDetails = async () => {
     try {
       setIsLoading(true);
-      const url = `${Endpoints.BASE_URL}${Endpoints.GET_CUSTOMER_TRANSACTION_DETAILED.url(
+      const url = `${Endpoints.BASE_URL}${Endpoints.GET_USER_TRANSACTION_DETAILED.url(
         customer_id,
         transaction_type,
         transaction_id

@@ -34,9 +34,9 @@ const UpdateDynamicRpa = lazy(() => import("../pages/Rpa/Update"));
 const ViewPanel = lazy(() => import("../pages/Panel/View"));
 const UpdatePanel = lazy(() => import("../pages/Panel/Update"));
 
-// CUSTOMER
-const CustomerList = lazy(() => import("../pages/Customer/View"));
-const CustomerProfile = lazy(() => import("../pages/Customer/View/CustomerProfile"));
+// USER
+const UserList = lazy(() => import("../pages/User/View"));
+const UserProfile = lazy(() => import("../pages/User/View/UserProfile"));
 
 const getModule = ({ label = "", path = "", children = [], element = null, routeOnly = false }) => {
   const key = path.split("/").join("_").toLowerCase();
@@ -199,13 +199,13 @@ const modules = [
   }),
 
   getModule({
-    label: "Customer",
-    path: "customer",
+    label: "Users",
+    path: "users",
     children: [
       getModule({
         label: "List",
-        path: "customer/list",
-        element: <CustomerList />,
+        path: "users/list",
+        element: <UserList />,
       }),
     ],
   }),
@@ -250,9 +250,9 @@ const routesOnly = [
     routeOnly: true,
   }),
   getModule({
-    label: "Customer Profile",
-    path: "customer/profile/:customer_id",
-    element: <CustomerProfile />,
+    label: "User Profile",
+    path: "users/profile/:customer_id",
+    element: <UserProfile />,
     routeOnly: true,
   }),
 ];

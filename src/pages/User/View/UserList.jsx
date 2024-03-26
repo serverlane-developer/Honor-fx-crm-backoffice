@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-// import moment from "moment";
 import { message } from "antd";
 import { Link } from "react-router-dom";
-// import propTypes from "prop-types";
 import apiConstants from "../../../config/apiConstants";
 import callApi from "../../../helpers/NetworkHelper";
 import getAxiosError from "../../../helpers/getAxiosError";
 import Loader from "../../../components/Loader";
 import DataTable from "../../../components/DataTable";
 import { objectToQueryString } from "../../../helpers/url";
-import ConfirmSwitch from "../../../components/ConfirmSwitch";
+import LabelValue from "../../../components/LabelValue";
+import { formatTimestamp } from "../../../helpers/functions";
 
-const ModulesTable = () => {
-  const [modules, setModules] = useState([]);
+const CustomerList = () => {
+  const [customers, setCustomer] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +26,7 @@ const ModulesTable = () => {
   });
 
   useEffect(() => {
-    const getModules = async ({ orderBy, dir, limit, skip } = {}) => {
+    const getCustomers = async ({ orderBy, dir, limit, skip } = {}) => {
       try {
         const { pageSize, current } = tableParams.pagination;
 
@@ -36,12 +35,11 @@ const ModulesTable = () => {
           dir,
           skip: skip || current * pageSize - pageSize,
           limit: limit || pageSize,
-          // panel_id
         };
         let queryString = objectToQueryString(data);
         if (queryString) queryString = `?${queryString}`;
 
-        const endpoint = apiConstants.GET_CUSTOMERS;
+        const endpoint = apiConstants.GET_USERS;
         const url = apiConstants.BASE_URL + endpoint.url + queryString;
 
         const response = await callApi(endpoint.method, url);
@@ -59,14 +57,14 @@ const ModulesTable = () => {
     const initialise = async () => {
       try {
         setIsLoading(true);
-        const res = await getModules({});
-        const modulesList = res?.data?.data || [];
-        setModules(modulesList);
+        const res = await getCustomers({});
+        const customersList = res?.data?.data || [];
+        setCustomer(customersList);
         const count = Number(res.headers["x-total-count"] || 0);
         setTotal(count);
       } catch (error) {
-        message.error(getAxiosError(error) || "Error while fetching modules");
-        console.error("Error while fetching modules", error);
+        message.error(getAxiosError(error) || "Error while fetching customers");
+        console.error("Error while fetching customers", error);
       } finally {
         setIsLoading(false);
       }
@@ -74,13 +72,6 @@ const ModulesTable = () => {
 
     initialise();
   }, [tableParams.pagination]);
-
-  const onStatusToggle = async (id, isDeleted) => {
-    const endpoint = apiConstants.FLAG_CUSTOMER;
-    const url = `${apiConstants.BASE_URL}${endpoint.url}/${id}`;
-    const { data } = await callApi(endpoint.method, url, { is_flagged: !isDeleted });
-    return data;
-  };
 
   const columns = [
     {
@@ -90,60 +81,59 @@ const ModulesTable = () => {
       render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
     },
     {
-      title: "Name",
-      dataIndex: "username",
-      key: "username",
+      key: "Details",
+      label: "Details",
+      render: (_, row) => (
+        <div>
+          <LabelValue label="Phone Number: " value={row?.phone_number} />
+          <LabelValue label="username: " value={row?.username} />
+          <LabelValue label="Email: " value={row?.email} />
+        </div>
+      ),
     },
     {
-      title: "account",
-      dataIndex: "account_name",
-      key: "account_name",
+      title: "Deposit",
+      dataIndex: "deposit",
+      key: "deposit",
+      render: (_, row) => (
+        <div>
+          <LabelValue label="Accounts: " value={row?.deposit_account_count} />
+          <LabelValue label="Total Transactions: " value={row?.total_deposit_transactions} />
+          <LabelValue label="Total Amount: " value={row?.total_deposit_amount} />
+        </div>
+      ),
     },
     {
-      title: "Total Withdraw Transactions",
-      dataIndex: "total_withdraw_transactions",
-      key: "total_withdraw_transactions",
+      title: "Withdraw",
+      dataIndex: "withdraw",
+      key: "withdraw",
+      render: (_, row) => (
+        <div>
+          <LabelValue label="Accounts: " value={row?.withdraw_account_count} />
+          <LabelValue label="Total Transactions: " value={row?.total_withdraw_transactions} />
+          <LabelValue label="Total Amount: " value={row?.total_withdraw_amount} />
+        </div>
+      ),
     },
     {
-      title: "Total Withdraw Amount",
-      dataIndex: "total_withdraw_amount",
-      key: "total_withdraw_amount",
-    },
-    {
-      title: "Total Deposit Transactions",
-      dataIndex: "total_deposit_transactions",
-      key: "total_deposit_transactions",
-    },
-    {
-      title: "Total Deposit Amount",
-      dataIndex: "total_deposit_amount",
-      key: "total_deposit_amount",
+      title: "Timestamps",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (____, row) => (
+        <div>
+          {/* <LabelValue label="Created By:" value={row.created_by} /> */}
+          {row.created_at && <LabelValue label="Created At:" value={formatTimestamp(row.created_at)} />}
+          {/* <LabelValue label="Updated By:" value={row.updated_by} /> */}
+          {row.updated_at && <LabelValue label="Updated At:" value={formatTimestamp(row.updated_at)} />}
+        </div>
+      ),
     },
     {
       title: "View Profile",
       dataIndex: "update_module",
       key: "update_module",
-      render: (value, row) => (
-        <Link to={`/Customer/profile/${row.customer_id}`}>View Profile</Link>
-      ),
+      render: (value, row) => <Link to={`/users/profile/${row.customer_id}`}>View Profile</Link>,
     },
-    {
-      title: "Flagged",
-      dataIndex: "is_flagged",
-      key: "is_flagged",
-      render: (value, row) => (
-        <ConfirmSwitch
-          module="flag"
-          initialState={!value}
-          onToggle={onStatusToggle}
-          id={row.customer_id}
-          successMessage="Successfully switched module status"
-          key={`${row.customer_id}_status_switch`}
-          checkedLabel="Flagged"
-          uncheckedLabel="Un-Flagged"
-        />
-      ),
-    }
   ];
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -155,14 +145,14 @@ const ModulesTable = () => {
     });
   };
 
-  if (isLoading) return <Loader message="Loading Modules..." />;
+  if (isLoading) return <Loader message="Loading Customers..." />;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <DataTable
         bordered
         columns={columns}
-        dataSource={modules}
+        dataSource={customers}
         onChange={handleTableChange}
         loading={isLoading}
         rowKey="customer_id"
@@ -176,8 +166,6 @@ const ModulesTable = () => {
   );
 };
 
-ModulesTable.propTypes = {
-  // panel_id: propTypes.string.isRequired,
-};
+CustomerList.propTypes = {};
 
-export default ModulesTable;
+export default CustomerList;

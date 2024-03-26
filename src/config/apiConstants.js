@@ -155,9 +155,18 @@ const Endpoints = {
   GET_PAYIN_GATEWAYS: { url: "/paymentGateway/payin", method: "GET" },
   DELETE_PAYIN_GATEWAY: { url: "/paymentGateway/payin", method: "DELETE" },
 
-  // CUSTOMER
-  GET_CUSTOMERS: { url: "/customer/list", method: "GET" },
-  GET_CUSTOMER_BY_ID: { url: "/customer/list", method: "GET" },
+  // USER
+  GET_USERS: { url: "/users/management", method: "GET" },
+  GET_USER_BY_ID: { url: "/users/management", method: "GET" },
+  GET_USER_TRANSACTIONS: {
+    url: (customer_id) => `/users/management/${customer_id}/transactions`,
+    method: "GET",
+  },
+  GET_USER_TRANSACTION_DETAILED: {
+    url: (customer_id, transaction_type, transaction_id) =>
+      `/users/management/${customer_id}/transaction/${transaction_type}/${transaction_id}`,
+    method: "GET",
+  },
 };
 
 export default Endpoints;
