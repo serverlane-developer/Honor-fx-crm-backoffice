@@ -3,6 +3,7 @@ import moment from "moment";
 
 import { message } from "antd";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import apiConstants from "../../../config/apiConstants";
 import callApi from "../../../helpers/NetworkHelper";
 
@@ -13,8 +14,11 @@ import DataTable from "../../../components/DataTable";
 import appConstants from "../../../config/appConstants";
 import { objectToQueryString } from "../../../helpers/url";
 import ConfirmSwitch from "../../../components/ConfirmSwitch";
+import UserReferralCode from "../../Referral/UserReferralCode";
 
 const AdminTable = () => {
+  const user = useSelector((state) => state.login.data);
+  const hasReferral = (user?.modules || []).includes("referral");
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +136,14 @@ const AdminTable = () => {
       dataIndex: "role_name",
       key: "role_name",
     },
+    ...(hasReferral && [
+      {
+        title: "Referral Code",
+        dataIndex: "user_id",
+        key: "user_id",
+        render: (value) => <UserReferralCode user_id={value} size="small" />
+      },
+    ]),
     {
       title: "Created by",
       dataIndex: "created_by",

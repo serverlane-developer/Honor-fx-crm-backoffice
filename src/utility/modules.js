@@ -38,6 +38,10 @@ const UpdatePanel = lazy(() => import("../pages/Panel/Update"));
 const UserList = lazy(() => import("../pages/User/View"));
 const UserProfile = lazy(() => import("../pages/User/View/UserProfile"));
 
+// REFERRAL
+const Referral = lazy(() => import("../pages/Referral"));
+const ReferralCustomerList = lazy(() => import("../pages/Referral/ReferralCustomerList"));
+
 const getModule = ({ label = "", path = "", children = [], element = null, routeOnly = false }) => {
   const key = path.split("/").join("_").toLowerCase();
   const module = {
@@ -209,6 +213,11 @@ const modules = [
       }),
     ],
   }),
+  getModule({
+    label: "Referral",
+    path: "referral",
+    element: <Referral />,
+  }),
 ];
 
 // modules that are not visible on side menu
@@ -253,6 +262,12 @@ const routesOnly = [
     label: "User Profile",
     path: "users/profile/:customer_id",
     element: <UserProfile />,
+    routeOnly: true,
+  }),
+  getModule({
+    label: "Referral List",
+    path: "referral/:code/:referralid",
+    element: <ReferralCustomerList />,
     routeOnly: true,
   }),
 ];

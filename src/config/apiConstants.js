@@ -168,15 +168,19 @@ const Endpoints = {
     method: "GET",
   },
   GET_USER_LOGIN_HISTORY: {
-    url: (customer_id) =>
-      `/users/management/${customer_id}/login-history`,
+    url: (customer_id) => `/users/management/${customer_id}/login-history`,
     method: "GET",
   },
   GET_USER_MT5_USER_LIST: {
-    url: (customer_id) =>
-      `/users/management/${customer_id}/mt5-users`,
+    url: (customer_id) => `/users/management/${customer_id}/mt5-users`,
     method: "GET",
   },
+
+  // REFERRAL
+  GET_REFERRAL_CODE: { url: "/referral/management/code", method: "GET" }, // Optional GET /:user_id to view other user's code
+  GET_REFERRAL_LIST: { url: "/referral/management/list", method: "GET" },
+  GET_CUSTOMER_LIST_BY_REFERRAL_ID: { url: "/referral/management/customers", method: "GET" }, // :referral_id
+  UPDATE_REFERRAL_CODE: { url: "/referral/management/code", method: "PUT" }, // Optional PUT /:user_id to update other user's code
 };
 
 export default Endpoints;

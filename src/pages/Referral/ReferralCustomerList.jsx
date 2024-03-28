@@ -1,0 +1,200 @@
+import React, { useEffect, useState } from "react";
+import propTypes from "prop-types";
+import { Button, Col, Input, Row, Tooltip, message } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
+
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import callApi from "../../helpers/NetworkHelper";
+import getAxiosError from "../../helpers/getAxiosError";
+import apiConstants from "../../config/apiConstants";
+import Loader from "../../components/Loader";
+import { objectToQueryString } from "../../helpers/url";
+import LabelValue from "../../components/LabelValue";
+import ReferralCode from "./ReferralCode";
+import { formatTimestamp } from "../../helpers/functions";
+import DataTable from "../../components/DataTable";
+import ErrorMessage from "../../components/ErrorMessage";
+
+const ReferralCustomerList = ({ referral_id: referralId = "", code: referral_code }) => {
+  const { referralid: params_referral_id, code: params_referral_code } = useParams();
+  const referral_id = referralId || params_referral_id;
+  const code = referral_code || params_referral_code;
+
+  const user = useSelector((state) => state.login.data);
+  const hasUserAccess = (user?.modules || []).includes("users");
+
+  const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 50,
+    },
+    scroll: {
+      y: 800,
+    },
+  });
+
+  const getList = async ({ orderBy, dir, limit, skip } = {}) => {
+    try {
+      const { pageSize, current } = tableParams.pagination;
+
+      const data = {
+        orderBy,
+        dir,
+        skip: skip || current * pageSize - pageSize,
+        limit: limit || pageSize,
+        search,
+      };
+      let queryString = objectToQueryString(data);
+      if (queryString) queryString = `?${queryString}`;
+
+      const endpoint = apiConstants.GET_CUSTOMER_LIST_BY_REFERRAL_ID;
+      const url = `${apiConstants.BASE_URL + endpoint.url}/${referral_id}/${queryString}`;
+
+      const response = await callApi(endpoint.method, url);
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+      return response;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const initialise = async () => {
+    try {
+      setIsLoading(true);
+      const res = await getList();
+      setList(res?.data?.data || []);
+      const count = Number(res.headers["x-total-count"] || 0);
+      setTotal(count);
+    } catch (error) {
+      message.error(getAxiosError(error) || "Error while fetching customer referral list");
+      console.error("Error while fetching customer referral list", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSearchChange = (e) => setSearch(e?.target?.value);
+
+  useEffect(() => {
+    initialise();
+  }, [tableParams.pagination]);
+
+  if (!referral_id) return <ErrorMessage message="Referral ID is required to view customer list!" />;
+
+  const columns = [
+    {
+      title: "Sr No",
+      dataIndex: "i",
+      key: "transaction_id",
+      render: (__, ___, i) => tableParams.pagination.pageSize * (tableParams.pagination.current - 1) + i + 1,
+    },
+    {
+      title: "Customer",
+      dataIndex: "username",
+      key: "username",
+      render: (_, row) => (
+        <div>
+          <LabelValue label="Username: " value={row.username} />
+          <LabelValue label="Phone Number: " value={row.phone_number} />
+        </div>
+      ),
+    },
+    {
+      title: "Timestamps",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (____, row) => (
+        <div>
+          {row.created_at && <LabelValue label="Created At:" value={formatTimestamp(row.created_at)} />}
+          {row.last_login_at && <LabelValue label="Last Login At:" value={formatTimestamp(row.last_login_at)} />}
+        </div>
+      ),
+    },
+  ];
+  if (hasUserAccess) {
+    columns.push({
+      title: "View Profile",
+      dataIndex: "update_module",
+      key: "update_module",
+      render: (value, row) => (
+        <Link to={`/users/profile/${row.customer_id}`} target="_blank" rel="noopener noreferrer">
+          View Profile
+        </Link>
+      ),
+    });
+  }
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      ...tableParams,
+      pagination,
+      filters,
+      ...sorter,
+    });
+  };
+
+  if (isLoading) {
+    return <Loader message={`Loading Customer Table for ${referral_id}...`} padding={50} size={24} />;
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div>
+        <ReferralCode code={code} />
+      </div>
+      <Row justify="space-between" align="middle" style={{ padding: "12px 0" }}>
+        <Col span={12} style={{ fontWeight: 600, fontSize: 16 }}>
+          [{total}] Customers
+          <Tooltip title="Refresh List">
+            <Button icon={<SyncOutlined />} onClick={initialise} style={{ marginLeft: 12 }} type="primary" />
+          </Tooltip>
+        </Col>
+        <Col span={6} style={{ textAlign: "right" }}>
+          <Input.Search
+            loading={isLoading}
+            placeholder="Search Phone Number"
+            value={search}
+            onChange={onSearchChange}
+            onSearch={initialise}
+            style={{
+              width: "100%",
+            }}
+            size="large"
+          />
+        </Col>
+      </Row>
+      <DataTable
+        bordered
+        columns={columns}
+        dataSource={list}
+        onChange={handleTableChange}
+        loading={isLoading}
+        rowKey="referral_id"
+        showHeader
+        {...tableParams}
+        pagination={{ ...tableParams.pagination, total }}
+        style={{ width: "100%" }}
+        width="100%"
+      />
+    </div>
+  );
+};
+ReferralCustomerList.propTypes = {
+  referral_id: propTypes.oneOfType([propTypes.string, null]),
+  code: propTypes.oneOfType([propTypes.string, null]),
+};
+ReferralCustomerList.defaultProps = {
+  referral_id: "",
+  code: "",
+};
+
+export default ReferralCustomerList;
